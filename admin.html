@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>KITTYME · 私人管理后台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body class="admin-page dark">
+    <section class="login-screen" id="loginScreen">
+      <div class="login-card">
+        <span class="login-symbol">◇</span>
+        <p>KITTYME PRIVATE SPACE</p>
+        <h1 id="loginTitle">管理员登录</h1>
+        <p class="login-hint" id="loginHint">输入管理密码进入后台。</p>
+        <form id="loginForm">
+          <label><span>管理密码</span><input id="adminPassword" type="password" minlength="6" required autocomplete="current-password" placeholder="至少 6 位" /></label>
+          <button type="submit">进入后台</button>
+        </form>
+        <small>此原型的密码仅保存在当前浏览器。正式上线需接入服务端身份验证。</small>
+      </div>
+    </section>
+
+    <div class="admin-shell" id="adminShell" hidden>
+      <header class="admin-header">
+        <a class="brand" href="index.html"><span>KITTYME</span></a>
+        <div><span class="private-chip">PRIVATE ADMIN</span><button id="lockAdmin">锁定后台</button></div>
+      </header>
+
+      <main class="admin-main">
+        <section class="admin-intro">
+          <div><p>CONTENT STUDIO</p><h1>贴图管理台</h1><span>审核投稿，决定哪些贴图可以出现在首页。</span></div>
+          <div class="admin-stats"><article><strong id="pendingCount">0</strong><span>待审核</span></article><article><strong id="publicCount">0</strong><span>已展示</span></article></div>
+        </section>
+
+        <nav class="admin-tabs" aria-label="内容分类">
+          <button class="active" data-admin-tab="pending">待审核 <span id="pendingBadge">0</span></button>
+          <button data-admin-tab="public">已展示 <span id="publicBadge">0</span></button>
+        </nav>
+
+        <section class="admin-panel active" id="pendingPanel">
+          <div class="admin-grid" id="submissionGrid"></div>
+          <div class="admin-empty" id="submissionEmpty" hidden><span>✓</span><h3>投稿都处理完啦</h3><p>新的投稿会出现在这里。</p></div>
+        </section>
+        <section class="admin-panel" id="publicPanel">
+          <div class="admin-grid" id="publicGrid"></div>
+          <div class="admin-empty" id="publicEmpty" hidden><span>☁</span><h3>还没有展示内容</h3></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="editor-dialog" id="editorDialog">
+      <button class="dialog-close" id="closeEditor" aria-label="关闭">×</button>
+      <div class="editor-head"><small>ASSET EDITOR</small><h2 id="editorTitle">审核并发布</h2></div>
+      <form id="editorForm">
+        <input type="hidden" id="editorMode" /><input type="hidden" id="editorId" />
+        <div class="editor-layout">
+          <label class="editor-image-field"><input id="editorImageInput" type="file" accept="image/*" /><img id="editorPreview" alt="贴图预览" /><span>点击替换图片</span></label>
+          <div class="form-grid">
+            <label class="field field-wide"><span>贴图名称 *</span><input id="editorName" required /></label>
+            <label class="field"><span>图片类型 *</span><select id="editorType"><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option></select></label>
+            <label class="field"><span>版权分级 *</span><select id="editorLicense"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option><option>自有版权</option><option>待核实</option></select></label>
+            <label class="field field-wide"><span>标签</span><input id="editorTags" placeholder="蓝色, 魔法, 循环" /></label>
+            <label class="field"><span>素材出处</span><input id="editorSource" /></label>
+            <label class="field"><span>出处地址</span><input id="editorSourceUrl" type="url" placeholder="https://" /></label>
+            <label class="field"><span>分辨率</span><input id="editorResolution" /></label>
+            <label class="field"><span>文件格式</span><input id="editorFormat" /></label>
+            <label class="field field-wide"><span>简介</span><textarea id="editorDescription" rows="3"></textarea></label>
+          </div>
+        </div>
+        <div class="editor-actions"><button type="button" class="danger-action" id="editorDelete">删除</button><button type="button" class="secondary-action" id="editorCancel">取消</button><button type="submit" class="primary-action" id="editorSubmit">保存并发布</button></div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="adminToast"><span>✓</span><p>已保存</p></div>
+    <script src="admin.js"></script>
+  </body>
+</html>

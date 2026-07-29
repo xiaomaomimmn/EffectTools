@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="KITTYME — 可爱又自由的 CC0 特效贴图素材库" />
+    <title>KITTYME · 特效贴图素材库</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="dark">
+    <div class="noise" aria-hidden="true"></div>
+    <div class="geometry-layer" id="geometryLayer" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="KITTYME 首页">
+        <span>KITTYME</span>
+      </a>
+      <nav class="main-nav" aria-label="主导航">
+        <a class="active" href="#gallery">特效贴图</a>
+        <a href="#collections">专题合集</a>
+        <a href="#about">关于本站</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" id="themeToggle" aria-label="切换主题">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2m0-14-2 2M7 17l-2 2"/></svg>
+        </button>
+        <button class="admin-button" id="adminButton">
+          <span class="status-dot"></span> 投稿贴图
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="gallery">
+        <div class="eyebrow"><span>◇</span> OPEN EFFECTS COLLECTION</div>
+        <div class="hero-copy">
+          <h1>自由素材，<br /><em>自在创作。</em></h1>
+          <p>精选高质量 CC0 特效贴图。明确标注来源，<br />为个人与商业创作提供更自由的选择。</p>
+        </div>
+        <div class="hero-stats">
+          <div><strong id="assetCount">08</strong><span>公开素材</span></div>
+          <div><strong>4K</strong><span>最高分辨率</span></div>
+          <div><strong>100%</strong><span>自由使用</span></div>
+        </div>
+      </section>
+
+      <section class="library-section">
+        <div class="toolbar">
+          <div class="filter-group" id="typeFilters" aria-label="类型筛选">
+            <button class="filter-pill active" data-filter="全部">全部</button>
+            <button class="filter-pill" data-filter="光效">光效</button>
+            <button class="filter-pill" data-filter="序列">序列</button>
+            <button class="filter-pill" data-filter="元素">元素</button>
+            <button class="filter-pill" data-filter="循环">循环</button>
+            <button class="filter-pill" data-filter="物体">物体</button>
+          </div>
+          <div class="toolbar-right">
+            <label class="search-box">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+              <input id="searchInput" type="search" placeholder="搜索名称或标签" />
+              <kbd>⌘ K</kbd>
+            </label>
+            <button class="sort-button" id="sortButton">最新收录 <span>↓</span></button>
+          </div>
+        </div>
+
+        <div class="result-meta">
+          <p>逛逛贴图 <span id="resultCount">8 ITEMS</span></p>
+          <span class="line"></span>
+          <button id="clearFilters">清除筛选</button>
+        </div>
+        <div class="asset-grid" id="assetGrid"></div>
+        <div class="empty-state" id="emptyState" hidden>
+          <div class="empty-symbol">⌁</div>
+          <h3>没有找到匹配的贴图</h3>
+          <p>试试其他关键词或清除筛选条件。</p>
+        </div>
+      </section>
+
+      <section class="manifesto" id="about">
+        <p>FREE TO CREATE · CC0</p>
+        <h2>开放素材，让创作更自由。</h2>
+        <span>本站收录资源均明确标注来源与版权状态。下载前请再次核对原始页面的授权信息。</span>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="#"><span>KITTYME</span></a>
+      <p>OPEN ASSETS FOR FREE CREATION.</p>
+      <p>© 2026 KITTYME</p>
+    </footer>
+
+    <dialog class="asset-dialog" id="assetDialog">
+      <button class="dialog-close" data-close-dialog aria-label="关闭">×</button>
+      <div class="detail-preview" id="detailPreview"></div>
+      <div class="detail-panel">
+        <div class="detail-topline"><span id="detailCode">FX—001</span><span class="license-badge" id="detailLicense">CC0</span></div>
+        <h2 id="detailName"></h2>
+        <p id="detailDescription"></p>
+        <dl class="detail-list">
+          <div><dt>图片类型</dt><dd id="detailType"></dd></div>
+          <div><dt>分辨率</dt><dd id="detailResolution"></dd></div>
+          <div><dt>文件格式</dt><dd id="detailFormat"></dd></div>
+          <div><dt>素材出处</dt><dd id="detailSource"></dd></div>
+        </dl>
+        <div class="detail-tags" id="detailTags"></div>
+        <div class="detail-actions">
+          <a class="primary-action" id="sourceLink" href="#" target="_blank" rel="noopener">访问素材出处 ↗</a>
+          <button class="secondary-action" id="editFromDetail" hidden>编辑资料</button>
+        </div>
+        <p class="license-note">请以素材原始页面的实时授权条款为准。本站不对第三方授权变更作担保。</p>
+      </div>
+    </dialog>
+
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="admin-drawer" id="adminDrawer" aria-hidden="true">
+      <div class="drawer-header">
+        <div><span>CONTRIBUTE</span><h2 id="formHeading">投稿一张贴图</h2></div>
+        <button class="dialog-close" id="closeDrawer" aria-label="关闭">×</button>
+      </div>
+      <form id="assetForm">
+        <input type="hidden" id="assetId" />
+        <label class="upload-field" id="uploadField">
+          <input type="file" id="assetImage" accept="image/*" />
+          <span class="upload-icon">＋</span>
+          <strong>上传预览图</strong>
+          <small>PNG / JPG / WEBP，建议不超过 2MB</small>
+          <img id="uploadPreview" alt="上传预览" hidden />
+        </label>
+        <div class="form-grid">
+          <label class="field field-wide"><span>贴图名称 *</span><input id="assetName" required placeholder="例如：霓虹粒子轨迹" /></label>
+          <label class="field"><span>图片类型 *</span><select id="assetType" required><option value="光效">光效</option><option value="序列">序列</option><option value="元素">元素</option><option value="循环">循环</option><option value="物体">物体</option></select></label>
+          <label class="field"><span>版权声明 *</span><select id="assetLicense" required><option value="CC0">CC0 · 公共领域</option><option value="CC BY">CC BY · 需署名</option><option value="CC BY-SA">CC BY-SA · 署名且相同方式共享</option><option value="自有版权">投稿者自有版权</option><option value="待核实">不确定 / 待核实</option></select></label>
+          <label class="field field-wide"><span>标签</span><input id="assetTags" placeholder="用逗号分隔，例如：蓝色, 魔法, 循环" /><small>建议添加 3–5 个便于检索的关键词</small></label>
+          <label class="field"><span>素材出处</span><input id="assetSource" placeholder="例如：OpenGameArt 或原创" /></label>
+          <label class="field"><span>出处地址</span><input id="assetSourceUrl" type="url" placeholder="https://" /></label>
+          <label class="field"><span>分辨率</span><input id="assetResolution" placeholder="例如：4096 × 4096" /></label>
+          <label class="field"><span>文件格式</span><input id="assetFormat" placeholder="例如：PNG" /></label>
+          <label class="field field-wide"><span>简介或补充说明</span><textarea id="assetDescription" rows="3" placeholder="描述视觉效果、适用场景或授权信息"></textarea></label>
+        </div>
+        <p class="submission-rule">提交要求：必须上传图片，并填写“素材出处”或“出处地址”中的至少一项。投稿后仅管理员可见，通过审核后才会展示。</p>
+        <div class="form-actions">
+          <button type="button" class="danger-action" id="deleteAsset" hidden>删除素材</button>
+          <button type="button" class="secondary-action" id="cancelForm">取消</button>
+          <button type="submit" class="primary-action">提交给管理员</button>
+        </div>
+      </form>
+    </aside>
+
+    <div class="toast" id="toast" role="status"><span>✓</span><p>已保存</p></div>
+    <script src="app.js"></script>
+  </body>
+</html>
