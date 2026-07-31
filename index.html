@@ -65,6 +65,10 @@
             <button class="sort-button" id="sortButton">最新收录 <span>↓</span></button>
           </div>
         </div>
+        <div class="subfilter-wrap" id="subfilterWrap" hidden>
+          <span>主要细分</span>
+          <div class="subfilter-group" id="tagFilters"></div>
+        </div>
 
         <div class="result-meta">
           <p>逛逛贴图 <span id="resultCount">8 ITEMS</span></p>
@@ -105,9 +109,13 @@
           <div><dt>文件格式</dt><dd id="detailFormat"></dd></div>
           <div><dt>素材出处</dt><dd id="detailSource"></dd></div>
         </dl>
-        <div class="detail-tags" id="detailTags"></div>
+        <div class="detail-taxonomy">
+          <div><span>主要细分</span><div class="detail-tags" id="detailPrimaryTags"></div></div>
+          <div id="detailSecondaryGroup"><span>二级细分</span><div class="detail-tags secondary-tags" id="detailSecondaryTags"></div></div>
+        </div>
         <div class="detail-actions">
           <a class="primary-action" id="sourceLink" href="#" target="_blank" rel="noopener">访问素材出处 ↗</a>
+          <button class="secondary-action detail-download" id="detailDownload" type="button">下载原图 ↓</button>
           <button class="secondary-action" id="editFromDetail" hidden>编辑资料</button>
         </div>
         <p class="license-note">请以素材原始页面的实时授权条款为准。本站不对第三方授权变更作担保。</p>
@@ -130,17 +138,10 @@
           <img id="uploadPreview" alt="上传预览" hidden />
         </label>
         <div class="form-grid">
-          <label class="field field-wide"><span>贴图名称 *</span><input id="assetName" required placeholder="例如：霓虹粒子轨迹" /></label>
-          <label class="field"><span>图片类型 *</span><select id="assetType" required><option value="光效">光效</option><option value="序列">序列</option><option value="元素">元素</option><option value="循环">循环</option><option value="物体">物体</option></select></label>
-          <label class="field"><span>版权声明 *</span><select id="assetLicense" required><option value="CC0">CC0 · 公共领域</option><option value="CC BY">CC BY · 需署名</option><option value="CC BY-SA">CC BY-SA · 署名且相同方式共享</option><option value="自有版权">投稿者自有版权</option><option value="待核实">不确定 / 待核实</option></select></label>
-          <label class="field field-wide"><span>标签</span><input id="assetTags" placeholder="用逗号分隔，例如：蓝色, 魔法, 循环" /><small>建议添加 3–5 个便于检索的关键词</small></label>
-          <label class="field"><span>素材出处</span><input id="assetSource" placeholder="例如：OpenGameArt 或原创" /></label>
-          <label class="field"><span>出处地址</span><input id="assetSourceUrl" type="url" placeholder="https://" /></label>
-          <label class="field"><span>分辨率</span><input id="assetResolution" placeholder="例如：4096 × 4096" /></label>
-          <label class="field"><span>文件格式</span><input id="assetFormat" placeholder="例如：PNG" /></label>
-          <label class="field field-wide"><span>简介或补充说明</span><textarea id="assetDescription" rows="3" placeholder="描述视觉效果、适用场景或授权信息"></textarea></label>
+          <label class="field"><span>基础分类 *</span><select id="assetType" required><option value="光效">光效</option><option value="序列">序列</option><option value="元素">元素</option><option value="循环">循环</option><option value="物体">物体</option></select></label>
+          <label class="field"><span>来源链接 *</span><input id="assetSourceUrl" required type="url" placeholder="https://example.com/source" /></label>
         </div>
-        <p class="submission-rule">提交要求：必须上传图片，并填写“素材出处”或“出处地址”中的至少一项。投稿后仅管理员可见，通过审核后才会展示。</p>
+        <p class="submission-rule">只需上传图片、选择分类并填写原始来源链接。投稿仅管理员可见，审核通过后才会展示。</p>
         <div class="form-actions">
           <button type="button" class="danger-action" id="deleteAsset" hidden>删除素材</button>
           <button type="button" class="secondary-action" id="cancelForm">取消</button>

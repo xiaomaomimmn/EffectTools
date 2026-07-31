@@ -1,0 +1,18 @@
+{
+  "collection": "Kenney Particle Pack",
+  "creator": "Kenney",
+  "source": "https://kenney.nl/assets/particle-pack",
+  "license": "CC0",
+  "licenseLabel": "CC0 1.0 Public Domain Dedication",
+  "attributionRequired": false,
+  "assetCount": 80,
+  "format": "PNG",
+  "resolution": "512 × 512",
+  "categories": {
+    "light-effects": 30,
+    "sequences": 0,
+    "elements": 36,
+    "loops": 8,
+    "objects": 6
+  }
+}

@@ -35,19 +35,56 @@
       <main class="admin-main">
         <section class="admin-intro">
           <div><p>CONTENT STUDIO</p><h1>贴图管理台</h1><span>审核投稿，决定哪些贴图可以出现在首页。</span></div>
-          <div class="admin-stats"><article><strong id="pendingCount">0</strong><span>待审核</span></article><article><strong id="publicCount">0</strong><span>已展示</span></article></div>
+          <div class="admin-stats"><article><strong id="pendingCount">0</strong><span>待审核</span></article><article><strong id="publicCount">0</strong><span>已审核</span></article></div>
         </section>
 
         <nav class="admin-tabs" aria-label="内容分类">
-          <button class="active" data-admin-tab="pending">待审核 <span id="pendingBadge">0</span></button>
-          <button data-admin-tab="public">已展示 <span id="publicBadge">0</span></button>
+          <button data-admin-tab="pending">待审核 <span id="pendingBadge">0</span></button>
+          <button class="active" data-admin-tab="public">已审核 <span id="publicBadge">0</span></button>
+          <button data-admin-tab="uncategorized">未分类 <span id="uncategorizedBadge">0</span></button>
         </nav>
 
-        <section class="admin-panel active" id="pendingPanel">
+        <section class="admin-panel" id="pendingPanel">
+          <div class="admin-list-tools">
+            <div class="category-filters">
+              <label><span>贴图大类</span><select data-type-filter="submission"><option value="">全部大类</option></select></label>
+              <label><span>主要细分类</span><select data-primary-filter="submission"><option value="">全部细分类</option></select></label>
+              <button type="button" class="clear-filter" data-clear-filter="submission">清除筛选</button>
+              <button type="button" class="sort-filter" data-admin-sort="submission">最新优先 <span>↓</span></button>
+            </div>
+            <p class="filter-result" data-filter-result="submission"></p>
+          </div>
+          <div class="bulk-edit-bar">
+            <label class="select-visible"><input type="checkbox" data-select-visible="submission" /><span>选择当前结果</span></label>
+            <strong>已选 <span data-selected-count="submission">0</span> 项</strong>
+            <label><span>贴图大类</span><select data-bulk-type="submission"><option value="">保持原大类</option><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option><option>不展示</option></select></label>
+            <label><span>主要细分类</span><input data-bulk-primary="submission" list="submissionPrimaryList" placeholder="保持原细分类" /></label>
+            <datalist id="submissionPrimaryList"></datalist>
+            <button type="button" class="bulk-delete" data-bulk-delete="submission" disabled>批量删除</button>
+            <button type="button" class="apply-bulk" data-apply-bulk="submission" disabled>批量应用</button>
+          </div>
           <div class="admin-grid" id="submissionGrid"></div>
           <div class="admin-empty" id="submissionEmpty" hidden><span>✓</span><h3>投稿都处理完啦</h3><p>新的投稿会出现在这里。</p></div>
         </section>
-        <section class="admin-panel" id="publicPanel">
+        <section class="admin-panel active" id="publicPanel">
+          <div class="admin-list-tools">
+            <div class="category-filters">
+              <label><span>贴图大类</span><select data-type-filter="asset"><option value="">全部大类</option></select></label>
+              <label><span>主要细分类</span><select data-primary-filter="asset"><option value="">全部细分类</option></select></label>
+              <button type="button" class="clear-filter" data-clear-filter="asset">清除筛选</button>
+              <button type="button" class="sort-filter" data-admin-sort="asset">最新优先 <span>↓</span></button>
+            </div>
+            <p class="filter-result" data-filter-result="asset"></p>
+          </div>
+          <div class="bulk-edit-bar">
+            <label class="select-visible"><input type="checkbox" data-select-visible="asset" /><span>选择当前结果</span></label>
+            <strong>已选 <span data-selected-count="asset">0</span> 项</strong>
+            <label><span>贴图大类</span><select data-bulk-type="asset"><option value="">保持原大类</option><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option><option>不展示</option></select></label>
+            <label><span>主要细分类</span><input data-bulk-primary="asset" list="assetPrimaryList" placeholder="保持原细分类" /></label>
+            <datalist id="assetPrimaryList"></datalist>
+            <button type="button" class="bulk-delete" data-bulk-delete="asset" disabled>批量删除</button>
+            <button type="button" class="apply-bulk" data-apply-bulk="asset" disabled>批量应用</button>
+          </div>
           <div class="admin-grid" id="publicGrid"></div>
           <div class="admin-empty" id="publicEmpty" hidden><span>☁</span><h3>还没有展示内容</h3></div>
         </section>
@@ -63,9 +100,9 @@
           <label class="editor-image-field"><input id="editorImageInput" type="file" accept="image/*" /><img id="editorPreview" alt="贴图预览" /><span>点击替换图片</span></label>
           <div class="form-grid">
             <label class="field field-wide"><span>贴图名称 *</span><input id="editorName" required /></label>
-            <label class="field"><span>图片类型 *</span><select id="editorType"><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option></select></label>
+            <label class="field"><span>贴图大类 *</span><select id="editorType"><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option><option>不展示</option></select></label>
             <label class="field"><span>版权分级 *</span><select id="editorLicense"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option><option>自有版权</option><option>待核实</option></select></label>
-            <label class="field field-wide"><span>标签</span><input id="editorTags" placeholder="蓝色, 魔法, 循环" /></label>
+            <label class="field field-wide"><span>细分标签</span><input id="editorTags" placeholder="魔法, 蓝色, 循环" /><small>第一个为主要细分，后续标签归入二级细分</small></label>
             <label class="field"><span>素材出处</span><input id="editorSource" /></label>
             <label class="field"><span>出处地址</span><input id="editorSourceUrl" type="url" placeholder="https://" /></label>
             <label class="field"><span>分辨率</span><input id="editorResolution" /></label>
