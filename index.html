@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="KITTYME — 可爱又自由的 CC0 特效贴图素材库" />
-    <title>KITTYME · 特效贴图素材库</title>
+    <meta name="description" content="MewFX — 来源清晰、版权分级明确的特效贴图素材库" />
+    <title>MewFX · 特效贴图素材库</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -14,35 +14,33 @@
     <div class="noise" aria-hidden="true"></div>
     <div class="geometry-layer" id="geometryLayer" aria-hidden="true"></div>
     <header class="site-header">
-      <a class="brand" href="#" aria-label="KITTYME 首页">
-        <span>KITTYME</span>
+      <a class="brand" href="#" aria-label="MewFX 首页">
+        <span>MewFX</span>
       </a>
       <nav class="main-nav" aria-label="主导航">
         <a class="active" href="#gallery">特效贴图</a>
         <a href="#collections">专题合集</a>
         <a href="#about">关于本站</a>
+        <span class="nav-indicator" aria-hidden="true"></span>
       </nav>
       <div class="header-actions">
         <button class="icon-button" id="themeToggle" aria-label="切换主题">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2m0-14-2 2M7 17l-2 2"/></svg>
-        </button>
-        <button class="admin-button" id="adminButton">
-          <span class="status-dot"></span> 投稿贴图
         </button>
       </div>
     </header>
 
     <main>
       <section class="hero" id="gallery">
-        <div class="eyebrow"><span>◇</span> OPEN EFFECTS COLLECTION</div>
+        <div class="eyebrow"><span>◇</span> CURATED EFFECTS COLLECTION</div>
         <div class="hero-copy">
-          <h1>自由素材，<br /><em>自在创作。</em></h1>
-          <p>精选高质量 CC0 特效贴图。明确标注来源，<br />为个人与商业创作提供更自由的选择。</p>
+          <h1>精选特效，<em>清晰授权。</em></h1>
+          <p>汇集 CC0、CC BY 与优质外部资源，清楚标注来源、授权与下载方式，帮助你更安心地用于个人或商业创作。</p>
         </div>
         <div class="hero-stats">
-          <div><strong id="assetCount">08</strong><span>公开素材</span></div>
+          <div><strong id="assetCount">08</strong><span>收录素材</span></div>
           <div><strong>4K</strong><span>最高分辨率</span></div>
-          <div><strong>100%</strong><span>自由使用</span></div>
+          <div><strong>100%</strong><span>来源可追溯</span></div>
         </div>
       </section>
 
@@ -51,9 +49,9 @@
           <div class="filter-group" id="typeFilters" aria-label="类型筛选">
             <button class="filter-pill active" data-filter="全部">全部</button>
             <button class="filter-pill" data-filter="光效">光效</button>
-            <button class="filter-pill" data-filter="序列">序列</button>
             <button class="filter-pill" data-filter="元素">元素</button>
             <button class="filter-pill" data-filter="循环">循环</button>
+            <button class="filter-pill" data-filter="序列">序列</button>
             <button class="filter-pill" data-filter="物体">物体</button>
           </div>
           <div class="toolbar-right">
@@ -70,10 +68,16 @@
           <div class="subfilter-group" id="tagFilters"></div>
         </div>
 
-        <div class="result-meta">
-          <p>逛逛贴图 <span id="resultCount">8 ITEMS</span></p>
-          <span class="line"></span>
-          <button id="clearFilters">清除筛选</button>
+        <div class="library-heading-row">
+          <div class="result-meta">
+            <p>逛逛贴图 <span id="resultCount">8 ITEMS</span></p>
+          </div>
+          <nav class="pagination pagination-top" data-pagination aria-label="贴图库顶部分页" hidden>
+            <button class="page-arrow previous-page" type="button" aria-label="上一页">←</button>
+            <div class="page-numbers"></div>
+            <button class="page-arrow next-page" type="button" aria-label="下一页">→</button>
+            <span class="page-summary"></span>
+          </nav>
         </div>
         <div class="asset-grid" id="assetGrid"></div>
         <div class="empty-state" id="emptyState" hidden>
@@ -81,24 +85,96 @@
           <h3>没有找到匹配的贴图</h3>
           <p>试试其他关键词或清除筛选条件。</p>
         </div>
+        <nav class="pagination pagination-bottom" data-pagination aria-label="贴图库底部分页" hidden>
+          <button class="page-arrow previous-page" type="button" aria-label="上一页">←</button>
+          <div class="page-numbers"></div>
+          <button class="page-arrow next-page" type="button" aria-label="下一页">→</button>
+          <span class="page-summary"></span>
+        </nav>
+      </section>
+
+      <section class="collections-section" id="collections">
+        <div class="collections-heading">
+          <div>
+            <p>CURATED EXTERNAL COLLECTIONS</p>
+            <h2>专题合集</h2>
+          </div>
+          <span>非 CC0 或禁止再分发的优质资源，只做介绍与原站导航，本站不托管文件。</span>
+        </div>
+
+        <article class="collection-card">
+          <div class="collection-art" data-collection-preview="bdragon-750" aria-hidden="true">
+            <span class="pixel-orbit orbit-one"></span>
+            <span class="pixel-orbit orbit-two"></span>
+            <span class="pixel-core"></span>
+            <strong>750+</strong>
+            <small>PIXEL FX</small>
+          </div>
+          <div class="collection-copy">
+            <div class="collection-topline">
+              <span>像素序列 · 外部资源</span>
+              <span class="restricted-badge">非商业免费</span>
+            </div>
+            <h3>750 Effect and FX Pixel All</h3>
+            <p>由 bdragon1727 制作的像素风特效序列合集，包含多种形态、动画帧和配色变体。免费版适合非商业游戏使用。</p>
+            <dl class="collection-license">
+              <div><dt>作者</dt><dd>bdragon1727</dd></div>
+              <div><dt>商业使用</dt><dd>需要向作者付费或赞助任意金额</dd></div>
+              <div><dt>允许</dt><dd>用于项目、按需要修改</dd></div>
+              <div><dt>禁止</dt><dd>转售或重新分发素材文件</dd></div>
+            </dl>
+            <div class="collection-actions">
+              <a class="primary-action" href="https://bdragon1727.itch.io/750-effect-and-fx-pixel-all" target="_blank" rel="noopener">前往作者页面查看与下载 ↗</a>
+              <span>下载和授权以作者页面实时说明为准</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="collection-card collection-card-simple-sfx">
+          <div class="collection-art" data-collection-preview="simple-sfx" aria-hidden="true">
+            <span class="pixel-orbit orbit-one"></span>
+            <span class="pixel-orbit orbit-two"></span>
+            <span class="pixel-core"></span>
+            <strong>32²</strong>
+            <small>SIMPLE SFX</small>
+          </div>
+          <div class="collection-copy">
+            <div class="collection-topline">
+              <span>像素特效 · 外部资源</span>
+              <span class="permissive-badge">免费商用</span>
+            </div>
+            <h3>32x32 Simple SFX</h3>
+            <p>由 Steel Soldier 制作的 32 × 32 像素特效合集，可用于个人、非商业和商业项目，也可以按项目需要修改。</p>
+            <dl class="collection-license">
+              <div><dt>作者</dt><dd>Steel Soldier</dd></div>
+              <div><dt>署名</dt><dd>非必须，作者希望尽量附上链接或署名</dd></div>
+              <div><dt>允许</dt><dd>用于个人、非商业及商业项目，可修改</dd></div>
+              <div><dt>本站处理</dt><dd>不托管、不重新分发、不提供本站下载</dd></div>
+            </dl>
+            <div class="collection-actions">
+              <a class="primary-action" href="https://steelsoldier.itch.io/32x32-simple-sfx" target="_blank" rel="noopener">前往作者页面查看与下载 ↗</a>
+              <span>下载和授权以作者页面实时说明为准</span>
+            </div>
+          </div>
+        </article>
       </section>
 
       <section class="manifesto" id="about">
-        <p>FREE TO CREATE · CC0</p>
-        <h2>开放素材，让创作更自由。</h2>
-        <span>本站收录资源均明确标注来源与版权状态。下载前请再次核对原始页面的授权信息。</span>
+        <p>CLEAR SOURCES · LICENSE LABELED</p>
+        <h2>来源清楚，创作更安心。</h2>
+        <span>本站按 CC0、CC BY 等授权类型清晰标注资源；禁止再分发的内容仅作专题介绍，并引导至作者原页。使用前请以原始页面的最新授权说明为准。</span>
       </section>
     </main>
 
     <footer>
-      <a class="brand footer-brand" href="#"><span>KITTYME</span></a>
-      <p>OPEN ASSETS FOR FREE CREATION.</p>
-      <p>© 2026 KITTYME</p>
+      <a class="brand footer-brand" href="#"><span>MewFX</span></a>
+      <p>CURATED EFFECTS · CLEAR LICENSES.</p>
+      <p>© 2026 MewFX</p>
     </footer>
 
     <dialog class="asset-dialog" id="assetDialog">
       <button class="dialog-close" data-close-dialog aria-label="关闭">×</button>
-      <div class="detail-preview" id="detailPreview"></div>
+      <div class="detail-preview" id="detailPreview"><img class="detail-sequence-image" id="detailSequenceImage" alt="" hidden /></div>
       <div class="detail-panel">
         <div class="detail-topline"><span id="detailCode">FX—001</span><span class="license-badge" id="detailLicense">CC0</span></div>
         <h2 id="detailName"></h2>
@@ -118,39 +194,15 @@
           <button class="secondary-action detail-download" id="detailDownload" type="button">下载原图 ↓</button>
           <button class="secondary-action" id="editFromDetail" hidden>编辑资料</button>
         </div>
-        <p class="license-note">请以素材原始页面的实时授权条款为准。本站不对第三方授权变更作担保。</p>
+        <p class="license-note"><span id="detailLicenseNote">请以素材原始页面的实时授权条款为准。本站不对第三方授权变更作担保。</span> <a id="detailLicenseLink" href="#" target="_blank" rel="noopener" hidden>查看许可证 ↗</a></p>
       </div>
     </dialog>
 
-    <div class="drawer-backdrop" id="drawerBackdrop"></div>
-    <aside class="admin-drawer" id="adminDrawer" aria-hidden="true">
-      <div class="drawer-header">
-        <div><span>CONTRIBUTE</span><h2 id="formHeading">投稿一张贴图</h2></div>
-        <button class="dialog-close" id="closeDrawer" aria-label="关闭">×</button>
-      </div>
-      <form id="assetForm">
-        <input type="hidden" id="assetId" />
-        <label class="upload-field" id="uploadField">
-          <input type="file" id="assetImage" accept="image/*" />
-          <span class="upload-icon">＋</span>
-          <strong>上传预览图</strong>
-          <small>PNG / JPG / WEBP，建议不超过 2MB</small>
-          <img id="uploadPreview" alt="上传预览" hidden />
-        </label>
-        <div class="form-grid">
-          <label class="field"><span>基础分类 *</span><select id="assetType" required><option value="光效">光效</option><option value="序列">序列</option><option value="元素">元素</option><option value="循环">循环</option><option value="物体">物体</option></select></label>
-          <label class="field"><span>来源链接 *</span><input id="assetSourceUrl" required type="url" placeholder="https://example.com/source" /></label>
-        </div>
-        <p class="submission-rule">只需上传图片、选择分类并填写原始来源链接。投稿仅管理员可见，审核通过后才会展示。</p>
-        <div class="form-actions">
-          <button type="button" class="danger-action" id="deleteAsset" hidden>删除素材</button>
-          <button type="button" class="secondary-action" id="cancelForm">取消</button>
-          <button type="submit" class="primary-action">提交给管理员</button>
-        </div>
-      </form>
-    </aside>
-
     <div class="toast" id="toast" role="status"><span>✓</span><p>已保存</p></div>
+    <iframe id="contentSyncBridge" src="sync-bridge.html" title="内容同步" hidden></iframe>
+    <script src="codemanu-assets.js"></script>
+    <script src="unity-smoke-assets.js"></script>
+    <script src="rpicster-assets.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

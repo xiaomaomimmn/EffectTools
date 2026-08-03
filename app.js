@@ -1,8 +1,19 @@
 const STORAGE_KEY = "kittyme-assets-v1";
 const LEGACY_STORAGE_KEY = "lumina-assets-v1";
-const SUBMISSIONS_KEY = "kittyme-submissions-v1";
 const DELETED_ASSETS_KEY = "kittyme-deleted-assets-v1";
+const DELETED_RECORDS_KEY = "kittyme-deleted-records-v1";
 const HIDDEN_TYPE_MIGRATION_KEY = "kittyme-hidden-type-migrated-v1";
+const DELETION_LEDGER_MIGRATION_KEY = "kittyme-deletion-ledger-migrated-v3";
+const UNITY_SMOKE_CC0_MIGRATION_KEY = "mewfx-unity-smoke-cc0-migrated-v2";
+const RPICSTER_TAXONOMY_MIGRATION_KEY = "mewfx-rpicster-taxonomy-migrated-v1";
+const RPICSTER_CC0_MIGRATION_KEY = "mewfx-rpicster-cc0-migrated-v1";
+const CONTENT_SYNC_CHANNEL_NAME = "mewfx-content-sync-v1";
+let contentSyncChannel = null;
+try { if(globalThis.BroadcastChannel)contentSyncChannel=new BroadcastChannel(CONTENT_SYNC_CHANNEL_NAME); } catch {}
+const PERMANENTLY_DELETED_ASSET_IDS = new Set([
+  "fx-001","fx-002","fx-003","fx-004","fx-005","fx-006","fx-007","fx-008",
+  "pixel-fx-32x32-grow-08","pixel-fx-32x32-grow-09","pixel-fx-32x32-grow-10","pixel-fx-32x32-grow-11","pixel-fx-32x32-grow-12"
+]);
 
 const TYPE_MIGRATION = { "烟雾": "元素", "粒子": "元素", "能量": "元素", "扭曲": "循环", "其他": "物体" };
 const normalizeType = type => TYPE_MIGRATION[type] || type || "物体";
@@ -56,6 +67,190 @@ const kenneyAssets = KENNEY_GROUPS.flatMap(group =>
     };
   })
 );
+
+const KENNEY_PATTERN_SOURCE = "https://kenney.nl/assets/pattern-pack";
+const KENNEY_PATTERN_GROUPS = [
+  { from: 1, to: 6, label: "条纹图案", tag: "条纹" },
+  { from: 7, to: 12, label: "几何线纹", tag: "几何线条" },
+  { from: 13, to: 16, label: "方格图案", tag: "方格" },
+  { from: 17, to: 22, label: "砖墙图案", tag: "砖墙" },
+  { from: 23, to: 24, label: "装饰纹样", tag: "几何纹样" },
+  { from: 25, to: 31, label: "波纹图案", tag: "波纹" },
+  { from: 32, to: 32, label: "圆点图案", tag: "圆点" },
+  { from: 33, to: 33, label: "编织图案", tag: "编织" },
+  { from: 34, to: 34, label: "星形图案", tag: "星形" },
+  { from: 35, to: 36, label: "三角图案", tag: "三角形" },
+  { from: 37, to: 42, label: "石块图案", tag: "不规则块面" },
+  { from: 43, to: 45, label: "碎片图案", tag: "碎片" },
+  { from: 46, to: 46, label: "星形图案", tag: "星形" },
+  { from: 47, to: 48, label: "线框图案", tag: "几何线条" },
+  { from: 49, to: 54, label: "几何块面", tag: "几何块面" },
+  { from: 55, to: 56, label: "粒子方块", tag: "方块粒子" },
+  { from: 57, to: 59, label: "块面图案", tag: "几何块面" },
+  { from: 60, to: 68, label: "菱格图案", tag: "菱格" },
+  { from: 69, to: 71, label: "圆点图案", tag: "圆点" },
+  { from: 72, to: 72, label: "蜂窝图案", tag: "蜂窝" },
+  { from: 73, to: 74, label: "圆点图案", tag: "圆点" },
+  { from: 75, to: 75, label: "心形图案", tag: "心形" },
+  { from: 76, to: 76, label: "方块图案", tag: "方块" },
+  { from: 77, to: 77, label: "圆点网络", tag: "圆点" },
+  { from: 78, to: 78, label: "菱格图案", tag: "菱格" },
+  { from: 79, to: 80, label: "有机网格", tag: "有机网格" },
+  { from: 81, to: 82, label: "粒子方块", tag: "方块粒子" },
+  { from: 83, to: 83, label: "波纹图案", tag: "波纹" },
+  { from: 84, to: 84, label: "交叉图案", tag: "交叉" }
+];
+
+const kenneyPatternAssets = Array.from({ length: 84 }, (_, index) => {
+  const value = index + 1;
+  const number = String(value).padStart(2, "0");
+  const hour = String(12 + Math.floor(index / 60)).padStart(2, "0");
+  const minute = String(index % 60).padStart(2, "0");
+  const group = KENNEY_PATTERN_GROUPS.find(item => value >= item.from && value <= item.to);
+  return {
+    id: `kenney-pattern-${number}`,
+    name: `${group.label} ${number}`,
+    type: "循环",
+    license: "CC0",
+    tags: [group.tag, "无缝图案", "黑白"],
+    source: "Kenney Pattern Pack",
+    sourceUrl: KENNEY_PATTERN_SOURCE,
+    resolution: "256 × 256",
+    format: "PNG",
+    description: "来自 Kenney Pattern Pack 的 CC0 无缝图案，可平铺用于材质、背景及循环纹理。",
+    image: `assets/library/loops/kenney-pattern-pack/pattern_${number}.png`,
+    createdAt: "2026-08-03",
+    collectedAt: `2026-08-03T${hour}:${minute}:00+08:00`
+  };
+});
+
+const KENNEY_SPLAT_SOURCE = "https://kenney.nl/assets/splat-pack";
+const KENNEY_SPLAT_RADIAL = new Set([0, 1, 2, 10, 11, 18, 19, 20, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]);
+const kenneySplatAssets = Array.from({ length: 36 }, (_, index) => {
+  const number = String(index).padStart(2, "0");
+  const variant = KENNEY_SPLAT_RADIAL.has(index) ? "放射飞溅" : "圆润墨渍";
+  return {
+    id: `kenney-splat-${number}`,
+    name: `${variant} ${number}`,
+    type: "元素",
+    license: "CC0",
+    tags: ["溅射", variant, "透明背景"],
+    source: "Kenney Splat Pack",
+    sourceUrl: KENNEY_SPLAT_SOURCE,
+    resolution: "512 × 512",
+    format: "PNG",
+    description: "来自 Kenney Splat Pack 的 CC0 透明背景溅射贴图，适用于液体、墨迹、污渍与击中特效。",
+    image: `assets/library/elements/kenney-splat-pack/splat${number}.png`,
+    createdAt: "2026-08-03",
+    collectedAt: `2026-08-03T14:${number}:00+08:00`
+  };
+});
+
+const KENNEY_LIGHT_MASK_SOURCE = "https://kenney.nl/assets/light-masks";
+function createKenneyLightMaskAssets() {
+  const files = [];
+  const add = (prefix, letters, variants, label, tag) => {
+    for (const letter of letters) for (const variant of variants) {
+      files.push({ file: `${prefix}_${letter}${variant ? `_${variant}` : ""}`, label, tag, variant });
+    }
+  };
+  add("circle", "abcd", ["", "noise", "streaks", "streaks_noise"], "圆形光照", "圆形光照");
+  add("circle_rings", "abcd", ["", "noise", "streaks"], "同心光环", "同心光环");
+  add("cone", "abcde", ["", "blur", "blur_noise", "noise"], "锥形光束", "光束");
+  add("cone_composed", "abcdef", ["", "noise"], "组合光束", "光束");
+  add("fan", "abcd", ["", "blur", "gradient"], "扇叶光影", "扇形光影");
+  add("foliage_canopy", "abc", ["", "blur", "noise"], "树叶光斑", "植被光影");
+  add("foliage_canopy", "d", ["", "noise"], "树叶光斑", "植被光影");
+  add("ring", "abc", ["", "noise", "streaks"], "环形光晕", "光环");
+  add("shape", "abcdefg", [""], "柔光形状", "柔光");
+  add("streaks_composed", "abcdefgh", ["", "noise"], "组合星芒", "星芒");
+  add("water_caustics", "abcd", [""], "水波焦散", "水波焦散");
+  add("window", "abcdefghijk", ["", "blur", "noise"], "窗格投影", "窗格光影");
+  const variantLabels = { "": "基础", noise: "噪点", streaks: "放射纹", streaks_noise: "放射纹噪点", blur: "柔化", blur_noise: "柔化噪点", gradient: "渐变" };
+  return files.map((item, index) => {
+    const number = String(index + 1).padStart(3, "0");
+    return {
+      id: `kenney-light-mask-${number}`,
+      name: `${item.label} ${number}`,
+      type: "光效",
+      license: "CC0",
+      tags: [item.tag, variantLabels[item.variant], "透明背景"],
+      source: "Kenney Light Masks",
+      sourceUrl: KENNEY_LIGHT_MASK_SOURCE,
+      resolution: "512 × 512",
+      format: "PNG",
+      description: "来自 Kenney Light Masks 的 CC0 光照遮罩，可用于灯光投影、光束、光晕与环境光影效果。",
+      image: `assets/library/light-effects/kenney-light-masks/${item.file}.png`,
+      createdAt: "2026-08-03",
+      collectedAt: `2026-08-03T15:${String(index % 60).padStart(2, "0")}:${String(Math.floor(index / 60)).padStart(2, "0")}+08:00`
+    };
+  });
+}
+const kenneyLightMaskAssets = createKenneyLightMaskAssets();
+
+const BDRAGON_750_SOURCE = "https://bdragon1727.itch.io/750-effect-and-fx-pixel-all";
+const BDRAGON_750_PARTS = {
+  1: [3, 4, 5, 6, 13, 14, 15, 16, 23, 24, 25, 26],
+  2: [62, 63, 64, 65, 69, 70, 71, 72, 76, 77, 78, 79],
+  3: [113, 114, 115, 116, 123, 124, 125, 126, 133, 134, 135, 136],
+  4: [174, 175, 176, 177, 184, 185, 186, 187, 194, 195, 196, 197],
+  5: [220, 221, 222, 223, 230, 231, 232, 233, 240, 241, 242, 243],
+  6: [273, 274, 275, 276, 283, 284, 285, 286, 293, 294, 295, 296],
+  7: [313, 314, 315, 316, 323, 324, 325, 326, 333, 334, 335, 336],
+  8: [375, 376, 377, 378, 385, 386, 387, 388, 395, 396, 397, 398],
+  9: [426, 427, 428, 429, 436, 437, 438, 439, 446, 447, 448, 449],
+  10: [464, 465, 466, 467, 474, 475, 476, 477, 484, 485, 486, 487],
+  11: [506, 507, 508, 509, 516, 517, 518, 519, 526, 527, 528, 529],
+  12: [566, 567, 568, 569, 576, 577, 578, 579, 586, 587, 588, 589],
+  13: [612, 613, 614, 615, 622, 623, 624, 625, 632, 633, 634, 635],
+  14: [652, 653, 654, 655, 662, 663, 664, 665, 672, 673, 674, 675],
+  15: [700, 701, 702, 703, 710, 711, 712, 713, 720, 721, 722, 723]
+};
+const BDRAGON_750_WIDTHS = {
+  320: [223, 230], 384: [323], 448: [63, 315],
+  512: [62, 64, 65, 220, 241, 273, 274, 275, 276, 284, 285, 313, 316, 324, 325, 326, 336, 375, 376, 377, 378, 385, 387, 396, 427],
+  576: [70, 222, 231, 232, 283, 286, 293, 294, 295, 296, 314, 333, 334, 335, 386, 388, 395, 397, 398, 436, 447, 449, 526],
+  640: [69, 71, 72, 174, 175, 176, 221, 233, 240, 242, 243, 426, 428, 429, 437, 438, 439, 446, 448],
+  704: [76, 78, 177, 184, 464, 466, 467, 474, 487, 506, 578],
+  768: [77, 79, 113, 114, 115, 116, 123, 124, 125, 126, 133, 134, 135, 136, 185, 186, 187, 194, 465, 475, 476, 477, 484, 485, 486, 507, 516, 517, 518, 519],
+  832: [3, 13, 508, 509, 527, 528, 529, 566, 567, 569, 587, 623],
+  896: [4, 5, 14, 15, 16, 23, 24, 25, 26, 195, 196, 197, 568, 576, 577, 579, 586, 588, 589, 614, 615, 622, 624, 632, 635, 672],
+  960: [6, 612, 613, 625, 633, 634, 655, 662], 1024: [652, 663, 664, 665],
+  1088: [653, 654, 702], 1152: [673, 674, 710], 1216: [675, 701], 1280: [711, 720],
+  1344: [712], 1408: [700, 703, 721], 1472: [713, 722, 723]
+};
+const BDRAGON_750_WIDTH_BY_ID = new Map(Object.entries(BDRAGON_750_WIDTHS).flatMap(([width, ids]) => ids.map(id => [id, Number(width)])));
+function createBdragon750SequenceAssets() {
+  let order = 0;
+  return Object.entries(BDRAGON_750_PARTS).flatMap(([partValue, ids]) => {
+    const part = Number(partValue);
+    return ids.map(value => {
+      const index = order++;
+      const idNumber = String(value).padStart(3, "0");
+      const fileName = value < 10 ? String(value).padStart(2, "0") : String(value);
+      const width = BDRAGON_750_WIDTH_BY_ID.get(value);
+      return {
+        id: `bdragon-750-sequence-${idNumber}`,
+        name: `像素特效序列 ${idNumber}`,
+        type: "序列",
+        license: "待核实",
+        tags: ["像素序列", `第 ${String(part).padStart(2, "0")} 组`, `${width / 64} 帧`, "多色变体"],
+        source: "750 Effect and FX Pixel All by bdragon1727",
+        sourceUrl: BDRAGON_750_SOURCE,
+        resolution: `${width} × 576`,
+        format: "PNG",
+        description: "来自 bdragon1727 的像素特效序列图集，包含横向动画帧与多行配色变体；授权等级尚待核实。",
+        image: `assets/library/sequences/bdragon-750-fx/part-${String(part).padStart(2, "0")}/${fileName}.png`,
+        createdAt: "2026-08-03",
+        collectedAt: `2026-08-03T${String(16 + Math.floor(index / 60)).padStart(2, "0")}:${String(index % 60).padStart(2, "0")}:00+08:00`
+      };
+    });
+  });
+}
+const bdragon750SequenceAssets = [];
+const codeManuVfxAssets = globalThis.CODEMANU_VFX_ASSETS || [];
+const unityWispySmokeAssets = globalThis.UNITY_WISPY_SMOKE_ASSETS || [];
+const rpicsterVfxAssets = globalThis.RPICSTER_VFX_ASSETS || [];
 
 const PIXEL_FX_SOURCE = "https://bdragon1727.itch.io/fx-pixel-texture";
 const PIXEL_FX_GROUPS = [
@@ -112,7 +307,7 @@ const pixelFxAtlasAssets = Array.from({ length: 7 }, (_, index) => {
   };
 });
 
-const seedAssets = [
+const retiredDefaultTestAssets = [
   { id: "fx-001", name: "星云脉冲", type: "能量", license: "CC0", tags: ["紫色", "星云", "爆发"], source: "Lumina Original", sourceUrl: "https://creativecommons.org/publicdomain/zero/1.0/deed.zh-hans", resolution: "4096 × 4096", format: "PNG", description: "由中心向外扩散的高能星云脉冲，适合作为技能爆发、传送或空间场景的叠加素材。", createdAt: "2026-07-24", preset: "nebula", colors: ["#a43fff", "#321069", "#ff75dc"] },
   { id: "fx-002", name: "日蚀光环", type: "光效", license: "CC0", tags: ["金色", "光环", "日蚀"], source: "Lumina Original", sourceUrl: "https://creativecommons.org/publicdomain/zero/1.0/deed.zh-hans", resolution: "4096 × 4096", format: "PNG", description: "柔和而明亮的环形逆光，可用于太阳、传送门和角色轮廓光。", createdAt: "2026-07-22", preset: "eclipse", colors: ["#ffe167", "#ff9238", "#39190c"] },
   { id: "fx-003", name: "电弧裂隙", type: "能量", license: "CC0", tags: ["蓝色", "闪电", "裂隙"], source: "Lumina Original", sourceUrl: "https://creativecommons.org/publicdomain/zero/1.0/deed.zh-hans", resolution: "2048 × 2048", format: "PNG", description: "锐利的蓝色电弧交错形成空间裂隙，适合科幻与魔法类视觉设计。", createdAt: "2026-07-20", preset: "electric", colors: ["#64ecff", "#126dff", "#061527"] },
@@ -123,41 +318,168 @@ const seedAssets = [
   { id: "fx-008", name: "熔火飞星", type: "粒子", license: "CC0", tags: ["橙色", "火焰", "火星"], source: "Lumina Original", sourceUrl: "https://creativecommons.org/publicdomain/zero/1.0/deed.zh-hans", resolution: "3840 × 2160", format: "PNG", description: "高温火星从熔火核心迸射而出，适合爆炸、锻造和火焰技能。", createdAt: "2026-07-08", preset: "embers", colors: ["#fff273", "#ff6b1c", "#270b05"] }
 ];
 
-const bundledAssets = [...kenneyAssets, ...pixelFxAssets, ...pixelFxAtlasAssets];
+const seedAssets = [];
+
+const legacyBundledAssets = [...kenneyAssets, ...pixelFxAssets, ...pixelFxAtlasAssets];
+const bundledAssets = [...legacyBundledAssets, ...kenneyPatternAssets, ...kenneySplatAssets, ...kenneyLightMaskAssets, ...bdragon750SequenceAssets, ...codeManuVfxAssets, ...unityWispySmokeAssets, ...rpicsterVfxAssets];
 const bundledAssetById = new Map(bundledAssets.map(asset => [asset.id, asset]));
+
+function migrateDeletionLedger() {
+  if(localStorage.getItem(DELETION_LEDGER_MIGRATION_KEY))return;
+  try {
+    const raw=localStorage.getItem(STORAGE_KEY);
+    const parsed=raw===null?null:JSON.parse(raw);
+    const hasSavedAssets=Array.isArray(parsed)&&parsed.length>0;
+    const testIds=PERMANENTLY_DELETED_ASSET_IDS;
+    const active=Array.isArray(parsed)?parsed.filter(item=>!testIds.has(String(item.id))):[];
+    if(Array.isArray(parsed)&&active.length!==parsed.length)localStorage.setItem(STORAGE_KEY,JSON.stringify(active));
+    const activeIds=new Set(active.map(item=>String(item.id)));
+    const recovered=hasSavedAssets?legacyBundledAssets.filter(item=>!item.id.startsWith("pixel-fx-atlas-")&&!activeIds.has(String(item.id))):[];
+    const savedIds=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]");
+    const savedRecords=JSON.parse(localStorage.getItem(DELETED_RECORDS_KEY)||"[]");
+    const ids=new Set(Array.isArray(savedIds)?savedIds.map(String):[]);
+    const records=new Map((Array.isArray(savedRecords)?savedRecords:[]).map(item=>[String(item.id),item]));
+    const deletedAt=new Date().toISOString();
+    const defaults=retiredDefaultTestAssets.map(item=>({id:item.id,name:item.name,image:"",type:"",source:"MewFX Original / 默认测试贴图",sourceUrl:""}));
+    const forced=bundledAssets.filter(item=>PERMANENTLY_DELETED_ASSET_IDS.has(String(item.id)));
+    [...defaults,...forced,...recovered].forEach(item=>{
+      const id=String(item.id);
+      ids.add(id);
+      if(!records.has(id))records.set(id,{id,name:item.name||"历史删除记录",image:normalizeLibraryPath(item.image||""),type:item.type||"",source:item.source||"其他来源",sourceUrl:item.sourceUrl||"",deletedAt});
+    });
+    localStorage.setItem(DELETED_ASSETS_KEY,JSON.stringify([...ids]));
+    localStorage.setItem(DELETED_RECORDS_KEY,JSON.stringify([...records.values()]));
+    localStorage.setItem(DELETION_LEDGER_MIGRATION_KEY,"1");
+  }catch{}
+}
+
+migrateDeletionLedger();
+
+function migrateUnitySmokeCc0() {
+  if(localStorage.getItem(UNITY_SMOKE_CC0_MIGRATION_KEY))return;
+  try {
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    if(Array.isArray(saved)){
+      const currentById=new Map(unityWispySmokeAssets.map(item=>[String(item.id),item]));
+      const updated=saved.map(item=>{
+        const current=currentById.get(String(item.id));
+        if(!current)return item;
+        const {lightPreview,downloadDisabled,...legacy}=item;
+        return {...legacy,...current};
+      });
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));
+    }
+    localStorage.setItem(UNITY_SMOKE_CC0_MIGRATION_KEY,"1");
+  } catch {}
+}
+
+migrateUnitySmokeCc0();
+
+function migrateRpicsterTaxonomy() {
+  if(localStorage.getItem(RPICSTER_TAXONOMY_MIGRATION_KEY))return;
+  try {
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    if(Array.isArray(saved)){
+      const currentById=new Map(rpicsterVfxAssets.map(item=>[String(item.id),item]));
+      const updated=saved.map(item=>{
+        const current=currentById.get(String(item.id));
+        return current?{...item,tags:current.tags,primaryTags:current.primaryTags,secondaryTags:current.secondaryTags}:item;
+      });
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));
+    }
+    localStorage.setItem(RPICSTER_TAXONOMY_MIGRATION_KEY,"1");
+  } catch {}
+}
+
+migrateRpicsterTaxonomy();
+
+function migrateRpicsterCc0() {
+  if(localStorage.getItem(RPICSTER_CC0_MIGRATION_KEY))return;
+  try {
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    if(Array.isArray(saved)){
+      const currentById=new Map(rpicsterVfxAssets.map(item=>[String(item.id),item]));
+      const updated=saved.map(item=>{
+        const current=currentById.get(String(item.id));
+        if(!current)return item;
+        const {downloadDisabled,...legacy}=item;
+        return {...legacy,...current};
+      });
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));
+    }
+    localStorage.setItem(RPICSTER_CC0_MIGRATION_KEY,"1");
+  } catch {}
+}
+
+migrateRpicsterCc0();
 
 let assets = loadAssets();
 try { localStorage.setItem(STORAGE_KEY, JSON.stringify(assets)); localStorage.setItem(HIDDEN_TYPE_MIGRATION_KEY,"1"); } catch {}
+let lastAssetStorageSnapshot = localStorage.getItem(STORAGE_KEY) || "";
+let lastDeletedStorageSnapshot = localStorage.getItem(DELETED_ASSETS_KEY) || "";
 let activeType = "全部";
 let activeTag = "全部";
 let query = "";
 let sortNewest = true;
 let selectedId = null;
-let pendingImage = "";
-let pendingFileName = "";
-let pendingResolution = "未标注";
+let currentPage = 1;
+let lastColumnCount = 0;
+let sequenceCardPreviews = [];
+let detailSequencePreview = null;
+let sequenceAnimationRequest = 0;
 
 const $ = (selector) => document.querySelector(selector);
 const grid = $("#assetGrid");
 const dialog = $("#assetDialog");
-const drawer = $("#adminDrawer");
-const backdrop = $("#drawerBackdrop");
+const COLLECTION_PREVIEW_URLS = {
+  "bdragon-750": "https://img.itch.zone/aW1hZ2UvMjkzODMwMS8xNzYwMzU0NC5naWY=/original/0gFHAh.gif",
+  "simple-sfx": "https://img.itch.zone/aW1nLzI3ODQ5ODgxLmdpZg==/original/7mNZvK.gif"
+};
+
+function initCollectionPreviews() {
+  document.querySelectorAll("[data-collection-preview]").forEach(container => {
+    const source = COLLECTION_PREVIEW_URLS[container.dataset.collectionPreview];
+    if (!source) return;
+    const preview = new Image();
+    preview.className = "collection-preview";
+    preview.alt = "";
+    preview.loading = "lazy";
+    preview.referrerPolicy = "no-referrer";
+    preview.addEventListener("load", () => container.classList.add("has-preview"), { once: true });
+    preview.addEventListener("error", () => preview.remove(), { once: true });
+    preview.src = source;
+    container.appendChild(preview);
+  });
+}
 
 function loadAssets() {
   try {
     const deletedValue = JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY) || "[]");
-    const deletedIds = new Set(Array.isArray(deletedValue) ? deletedValue.map(String) : []);
+    const deletedIds = new Set([...(Array.isArray(deletedValue) ? deletedValue.map(String) : []),...PERMANENTLY_DELETED_ASSET_IDS]);
     const raw = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     const saved = JSON.parse(raw);
-    const list = (Array.isArray(saved) ? saved : structuredClone(seedAssets)).filter(asset => !deletedIds.has(String(asset.id)));
+    const list = (Array.isArray(saved) ? saved : structuredClone(seedAssets))
+      .filter(asset => !deletedIds.has(String(asset.id)))
+      .filter(asset => !String(asset.id).startsWith("bdragon-750-sequence-") && asset.id !== "bdragon-750-source");
     const migrateHiddenType=!localStorage.getItem(HIDDEN_TYPE_MIGRATION_KEY);
     const normalized = list.map(asset => {
       const bundled = bundledAssetById.get(asset.id);
+      const hasCanonicalLicense=String(asset.id).startsWith("unity-wispy-smoke-")||String(asset.id).startsWith("rpicster-");
+      const canonicalLicense=hasCanonicalLicense&&bundled?{
+        license:bundled.license,
+        licenseUrl:bundled.licenseUrl,
+        attributionRequired:bundled.attributionRequired,
+        optionalAttribution:bundled.optionalAttribution,
+        downloadDisabled:bundled.downloadDisabled,
+        downloadUrl:bundled.downloadUrl,
+        downloadFileName:bundled.downloadFileName
+      }:{};
       return {
         ...asset,
+        ...canonicalLicense,
         type: migrateHiddenType&&asset.id?.startsWith("pixel-fx-atlas-")&&asset.type==="物体"&&!(asset.tags||[]).length?"不展示":normalizeType(asset.type),
-        resolution: asset.id?.startsWith("kenney-") ? "512 × 512" : asset.resolution,
-        source: asset.source === "Lumina Original" ? "KITTYME Original" : asset.source,
+        resolution: bundled?.resolution || asset.resolution,
+        source: ["Lumina Original", "KITTYME Original"].includes(asset.source) ? "MewFX Original" : asset.source,
         image: bundled?.image || normalizeLibraryPath(asset.image),
         collectedAt: bundled?.collectedAt || asset.collectedAt || asset.createdAt
       };
@@ -168,19 +490,17 @@ function loadAssets() {
     let deletedIds = new Set();
     try {
       const deletedValue = JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY) || "[]");
-      deletedIds = new Set(Array.isArray(deletedValue) ? deletedValue.map(String) : []);
+      deletedIds = new Set([...(Array.isArray(deletedValue) ? deletedValue.map(String) : []),...PERMANENTLY_DELETED_ASSET_IDS]);
     } catch {}
     return [
-      ...structuredClone(seedAssets).map(asset => ({ ...asset, type: normalizeType(asset.type), source: "KITTYME Original" })),
-      ...kenneyAssets,
-      ...pixelFxAssets,
-      ...pixelFxAtlasAssets
+      ...structuredClone(seedAssets).map(asset => ({ ...asset, type: normalizeType(asset.type), source: "MewFX Original" })),
+      ...bundledAssets
     ].filter(asset => !deletedIds.has(String(asset.id)));
   }
 }
 
 function persist() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(assets)); }
+  try { const serialized=JSON.stringify(assets);localStorage.setItem(STORAGE_KEY,serialized);lastAssetStorageSnapshot=serialized; }
   catch { showToast("图片太大，浏览器无法继续保存"); }
 }
 
@@ -255,6 +575,26 @@ function svgData(asset) {
 
 function imageFor(asset) { return asset.image || svgData(asset); }
 
+function updateSequenceAnimations(timestamp) {
+  const previews = detailSequencePreview ? [...sequenceCardPreviews, detailSequencePreview] : sequenceCardPreviews;
+  previews.forEach(preview => {
+    const frameIndex = Math.floor(timestamp * preview.frameRate / 1000) % preview.frames.length;
+    if (frameIndex === preview.lastFrame) return;
+    preview.lastFrame = frameIndex;
+    preview.apply(preview.frames[frameIndex]);
+  });
+  sequenceAnimationRequest = previews.length ? requestAnimationFrame(updateSequenceAnimations) : 0;
+}
+
+function syncSequenceAnimations() {
+  const hasPreviews = sequenceCardPreviews.length > 0 || Boolean(detailSequencePreview);
+  if (hasPreviews && !sequenceAnimationRequest) sequenceAnimationRequest = requestAnimationFrame(updateSequenceAnimations);
+  if (!hasPreviews && sequenceAnimationRequest) {
+    cancelAnimationFrame(sequenceAnimationRequest);
+    sequenceAnimationRequest = 0;
+  }
+}
+
 function assetDimensions(asset) {
   const match = String(asset.resolution || "").match(/(\d+)\s*[×xX]\s*(\d+)/);
   return match ? { width: Number(match[1]), height: Number(match[2]) } : null;
@@ -262,7 +602,7 @@ function assetDimensions(asset) {
 
 function isSmallAsset(asset) {
   const dimensions = assetDimensions(asset);
-  return Boolean(dimensions && dimensions.width < 256 && dimensions.height < 256);
+  return Boolean(asset.type !== "序列" && dimensions && dimensions.width < 128 && dimensions.height < 128);
 }
 
 function collectionTime(asset) {
@@ -285,6 +625,46 @@ function visibleAssets() {
     });
 }
 
+function columnsPerPage() {
+  return Math.max(1, Number.parseInt(getComputedStyle(grid).getPropertyValue("--grid-columns"), 10) || 1);
+}
+
+function pageSize() {
+  return columnsPerPage() * 10;
+}
+
+function pageItems(totalPages) {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+  const pages = new Set([1, totalPages, currentPage - 1, currentPage, currentPage + 1]);
+  return [...pages].filter(page => page > 0 && page <= totalPages).sort((a, b) => a - b);
+}
+
+function renderPagination(totalItems, perPage) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / perPage));
+  currentPage = Math.min(Math.max(1, currentPage), totalPages);
+  const items = pageItems(totalPages);
+  let previous = 0;
+  const numberMarkup = items.map(page => {
+    const gap = previous && page - previous > 1 ? '<span class="page-gap">…</span>' : "";
+    previous = page;
+    return `${gap}<button type="button" data-page="${page}" class="${page === currentPage ? "active" : ""}" aria-label="第 ${page} 页"${page === currentPage ? ' aria-current="page"' : ""}>${page}</button>`;
+  }).join("");
+  const start = totalItems ? (currentPage - 1) * perPage + 1 : 0;
+  const end = Math.min(currentPage * perPage, totalItems);
+  document.querySelectorAll("[data-pagination]").forEach(pagination => {
+    pagination.hidden = totalItems === 0;
+    pagination.querySelector(".previous-page").disabled = currentPage === 1;
+    pagination.querySelector(".next-page").disabled = currentPage === totalPages;
+    pagination.querySelector(".page-numbers").innerHTML = numberMarkup;
+    pagination.querySelector(".page-summary").textContent = `${start}–${end} / ${totalItems}`;
+    pagination.querySelectorAll("[data-page]").forEach(button => button.addEventListener("click", () => {
+      currentPage = Number(button.dataset.page);
+      render();
+      grid.scrollIntoView({ behavior: "smooth", block: "start" });
+    }));
+  });
+}
+
 function availableTags() {
   if (activeType === "全部") return [];
   const counts = new Map();
@@ -295,18 +675,15 @@ function availableTags() {
 }
 
 function primaryTagsFor(asset) {
-  if (asset.primaryTags?.length) return asset.primaryTags;
-  const secondaryHints = new Set(["红色", "橙色", "黄色", "绿色", "青色", "蓝色", "紫色", "粉色", "黑色", "白色", "黑白", "金色", "银色"]);
   const tags = asset.tags || [];
-  return tags.filter(tag => !secondaryHints.has(tag)).slice(0, 1).length
-    ? tags.filter(tag => !secondaryHints.has(tag)).slice(0, 1)
-    : tags.slice(0, 1);
+  const primary = tags.slice(0, 1);
+  return primary.length ? primary : (asset.primaryTags || []).slice(0, 1);
 }
 
 function secondaryTagsFor(asset) {
-  if (asset.secondaryTags) return asset.secondaryTags;
   const primary = new Set(primaryTagsFor(asset));
-  return (asset.tags || []).filter(tag => !primary.has(tag));
+  const tags = (asset.tags || []).filter(tag => !primary.has(tag));
+  return tags.length ? tags : (asset.secondaryTags || []).filter(tag => !primary.has(tag));
 }
 
 function downloadFileName(asset) {
@@ -316,7 +693,17 @@ function downloadFileName(asset) {
 }
 
 async function downloadAsset(asset) {
-  if (!asset) return;
+  if (!asset || asset.downloadDisabled) return;
+  if (asset.downloadUrl) {
+    const link = document.createElement("a");
+    link.href = asset.downloadUrl;
+    link.download = asset.downloadFileName || "kittyme-sequence.zip";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    showToast("已开始下载 30 FPS Frames 序列");
+    return;
+  }
   const source = imageFor(asset);
   try {
     const image = new Image();
@@ -351,10 +738,11 @@ function renderTagFilters() {
   const tags = availableTags();
   $("#subfilterWrap").hidden = tags.length === 0;
   $("#tagFilters").innerHTML = tags.length ? `
-    <button class="tag-filter active" data-tag="全部">全部</button>
-    ${tags.map(([tag, count]) => `<button class="tag-filter" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)} <small>${count}</small></button>`).join("")}` : "";
+    <button class="tag-filter${activeTag === "全部" ? " active" : ""}" data-tag="全部">全部</button>
+    ${tags.map(([tag, count]) => `<button class="tag-filter${activeTag === tag ? " active" : ""}" data-tag="${escapeHtml(tag)}">${escapeHtml(tag)} <small>${count}</small></button>`).join("")}` : "";
   $("#tagFilters").querySelectorAll("[data-tag]").forEach(button => button.addEventListener("click", () => {
     activeTag = button.dataset.tag;
+    currentPage = 1;
     $("#tagFilters").querySelectorAll("[data-tag]").forEach(item => item.classList.toggle("active", item === button));
     render();
   }));
@@ -378,32 +766,51 @@ async function detectMissingResolutions() {
 }
 
 function render() {
-  const list = visibleAssets();
+  sequenceCardPreviews = [];
+  const filteredList = visibleAssets();
+  const perPage = pageSize();
+  const totalPages = Math.max(1, Math.ceil(filteredList.length / perPage));
+  currentPage = Math.min(currentPage, totalPages);
+  const startIndex = (currentPage - 1) * perPage;
+  const list = filteredList.slice(startIndex, startIndex + perPage);
   grid.innerHTML = list.map((asset, i) => `
-    <article class="asset-card asset-card-compact${isSmallAsset(asset) ? " asset-card-pixel" : ""}" tabindex="0" data-id="${asset.id}" aria-label="查看 ${escapeHtml(asset.name)}">
+    <article class="asset-card asset-card-compact${isSmallAsset(asset) ? " asset-card-pixel" : ""}${asset.type === "序列" && !asset.externalOnly ? " asset-card-sequence" : ""}${asset.smoothPreview || asset.id.startsWith("codemanu-vfx-") ? " asset-card-smooth-sequence" : ""}${asset.darkPreview ? " asset-card-dark-preview" : ""}${asset.externalOnly ? " asset-card-external" : ""}" tabindex="0" data-id="${asset.id}" aria-label="查看 ${escapeHtml(asset.name)}">
       <div class="card-preview">
-        <span class="card-index">${String(i + 1).padStart(2, "0")}</span>
+        <span class="card-index">${String(startIndex + i + 1).padStart(2, "0")}</span>
         <span class="card-license">${escapeHtml(asset.license)}</span>
         <img class="asset-preview" src="${imageFor(asset)}" alt="${escapeHtml(asset.name)} 特效贴图预览" loading="lazy" />
       </div>
       <div class="card-info"><div><h3>${escapeHtml(asset.name)}</h3><p>${asset.tags.slice(0, 3).map(escapeHtml).join(" · ")}</p></div><span>${escapeHtml(asset.type)}</span></div>
     </article>`).join("");
-  $("#resultCount").textContent = `${list.length} ITEMS`;
+  $("#resultCount").textContent = `${filteredList.length} ITEMS`;
   $("#assetCount").textContent = String(assets.filter(asset => asset.type !== "不展示").length).padStart(2, "0");
-  $("#emptyState").hidden = list.length > 0;
+  $("#emptyState").hidden = filteredList.length > 0;
+  renderPagination(filteredList.length, perPage);
   grid.querySelectorAll(".asset-card").forEach(card => {
     card.addEventListener("click", () => openDetail(card.dataset.id));
     card.addEventListener("keydown", e => { if (e.key === "Enter") openDetail(card.dataset.id); });
+    const asset = assets.find(item => item.id === card.dataset.id);
+    if (asset?.sequenceFrames?.length > 1) {
+      const image = card.querySelector(".asset-preview");
+      sequenceCardPreviews.push({
+        frames: asset.sequenceFrames,
+        frameRate: Math.max(1, Number(asset.frameRate) || 30),
+        lastFrame: -1,
+        apply: source => { image.src = source; }
+      });
+    }
   });
   grid.querySelectorAll(".asset-preview").forEach(image => {
     const applyPreviewMode = () => {
-      const isPixelAsset = image.naturalWidth <= 128 && image.naturalHeight <= 128;
+      const asset = assets.find(item => item.id === image.closest(".asset-card")?.dataset.id);
+      const isPixelAsset = asset?.type !== "序列" && image.naturalWidth < 128 && image.naturalHeight < 128;
       image.classList.toggle("compact-preview", isPixelAsset);
       image.classList.toggle("pixel-preview", isPixelAsset);
     };
     if (image.complete) applyPreviewMode();
     else image.addEventListener("load", applyPreviewMode, { once: true });
   });
+  syncSequenceAnimations();
 }
 
 function openDetail(id) {
@@ -412,10 +819,20 @@ function openDetail(id) {
   selectedId = id;
   const smallAsset = isSmallAsset(asset);
   const dimensions = assetDimensions(asset);
-  const previewScale = smallAsset ? 50 : 72;
+  const hasSequencePreview = asset.sequenceFrames?.length > 1;
+  const detailPreview = $("#detailPreview");
+  const detailSequenceImage = $("#detailSequenceImage");
+  const previewScale = asset.type === "序列" && !asset.externalOnly ? 92 : smallAsset ? 50 : 72;
   dialog.classList.toggle("small-asset-detail", smallAsset);
-  $("#detailPreview").style.backgroundImage = `url("${imageFor(asset)}")`;
-  $("#detailPreview").style.backgroundSize = dimensions && dimensions.height > dimensions.width
+  dialog.classList.toggle("sequence-asset-detail", asset.type === "序列" && !asset.externalOnly);
+  dialog.classList.toggle("smooth-sequence-detail", Boolean(asset.smoothPreview || asset.id.startsWith("codemanu-vfx-")));
+  dialog.classList.toggle("dark-asset-detail", Boolean(asset.darkPreview));
+  detailSequenceImage.hidden = !hasSequencePreview;
+  detailSequenceImage.alt = hasSequencePreview ? `${asset.name} 序列预览` : "";
+  if(hasSequencePreview)detailSequenceImage.src = imageFor(asset);
+  else detailSequenceImage.removeAttribute("src");
+  detailPreview.style.backgroundImage = hasSequencePreview ? "none" : `url("${imageFor(asset)}")`;
+  detailPreview.style.backgroundSize = dimensions && dimensions.height > dimensions.width
     ? `auto ${previewScale}%`
     : `${previewScale}% auto`;
   $("#detailCode").textContent = asset.id.toUpperCase().replace("FX-", "FX—");
@@ -433,83 +850,22 @@ function openDetail(id) {
   $("#detailSecondaryGroup").hidden = secondaryTags.length === 0;
   $("#sourceLink").href = asset.sourceUrl || "#";
   $("#sourceLink").hidden = !asset.sourceUrl;
-  $("#detailDownload").textContent = `下载原图 ↓`;
+  $("#sourceLink").textContent = asset.externalOnly ? "前往作者页面下载 ↗" : "访问素材出处 ↗";
+  $("#detailDownload").hidden = Boolean(asset.externalOnly || asset.downloadDisabled);
+  $("#detailDownload").textContent = asset.downloadUrl ? "下载 Frames ZIP ↓" : "下载原图 ↓";
+  $("#detailLicenseNote").textContent = asset.attributionRequired
+    ? "使用与再分发时必须署名原作者，并保留来源及许可证链接。"
+    : "请以素材原始页面的实时授权条款为准。本站不对第三方授权变更作担保。";
+  $("#detailLicenseLink").href = asset.licenseUrl || "#";
+  $("#detailLicenseLink").hidden = !asset.licenseUrl;
+  detailSequencePreview = hasSequencePreview ? {
+    frames: asset.sequenceFrames,
+    frameRate: Math.max(1, Number(asset.frameRate) || 30),
+    lastFrame: -1,
+    apply: source => { detailSequenceImage.src = source; }
+  } : null;
+  syncSequenceAnimations();
   dialog.showModal();
-}
-
-function openDrawer() {
-  selectedId = null;
-  pendingImage = "";
-  pendingFileName = "";
-  pendingResolution = "未标注";
-  $("#assetForm").reset();
-  $("#uploadPreview").hidden = true;
-  $("#uploadPreview").removeAttribute("src");
-  $("#deleteAsset").hidden = true;
-  $("#formHeading").textContent = "投稿一张贴图";
-  $("#assetId").value = "";
-  drawer.classList.add("open");
-  backdrop.classList.add("open");
-  drawer.setAttribute("aria-hidden", "false");
-  setTimeout(() => $("#assetType").focus(), 350);
-}
-
-function closeDrawer() {
-  drawer.classList.remove("open");
-  backdrop.classList.remove("open");
-  drawer.setAttribute("aria-hidden", "true");
-}
-
-function submitAsset(event) {
-  event.preventDefault();
-  const sourceUrl = $("#assetSourceUrl").value.trim();
-  if (!pendingImage) { showToast("请先上传贴图图片"); return; }
-  if (!sourceUrl) { showToast("请填写原始来源链接"); return; }
-  let source = "来源链接";
-  try {
-    const parsedSource = new URL(sourceUrl);
-    if (!["http:", "https:"].includes(parsedSource.protocol) || !parsedSource.hostname) throw new Error();
-    source = parsedSource.hostname.replace(/^www\./, "");
-  } catch { showToast("请填写有效的 http(s) 来源链接"); return; }
-  const fileName = pendingFileName.replace(/\.[^.]+$/, "").trim() || "未命名贴图";
-  const extension = pendingFileName.includes(".") ? pendingFileName.split(".").pop().toUpperCase() : "未标注";
-  const record = {
-    id: `submission-${Date.now().toString(36)}`,
-    name: fileName,
-    type: $("#assetType").value,
-    license: "待核实",
-    tags: [],
-    source,
-    sourceUrl,
-    resolution: pendingResolution,
-    format: extension,
-    description: "",
-    image: pendingImage,
-    status: "pending",
-    submittedAt: new Date().toISOString()
-  };
-  try {
-    const submissions = JSON.parse(localStorage.getItem(SUBMISSIONS_KEY) || "[]");
-    submissions.unshift(record);
-    localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(submissions));
-  } catch { showToast("图片太大，投稿保存失败"); return; }
-  closeDrawer();
-  showToast("投稿成功，等待管理员审核");
-}
-
-function deleteSelected() {
-  const id = $("#assetId").value;
-  if (!id || !confirm("确认删除这条素材记录吗？此操作无法撤销。")) return;
-  assets = assets.filter(item => item.id !== id);
-  try {
-    const saved = JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY) || "[]");
-    localStorage.setItem(DELETED_ASSETS_KEY, JSON.stringify([...new Set([...(Array.isArray(saved) ? saved : []), id])]));
-  } catch {}
-  persist();
-  closeDrawer();
-  if (dialog.open) dialog.close();
-  render();
-  showToast("素材已删除");
 }
 
 function randomPalette() {
@@ -529,66 +885,107 @@ function showToast(message) {
   toastTimer = setTimeout(() => $("#toast").classList.remove("show"), 2400);
 }
 
+function setActiveNavigation(href) {
+  const navigation = document.querySelector(".main-nav");
+  const links = [...navigation.querySelectorAll("a[href^='#']")];
+  links.forEach(link =>
+    link.classList.toggle("active", link.getAttribute("href") === href)
+  );
+  const activeLink = links.find(link => link.classList.contains("active"));
+  const indicator = navigation.querySelector(".nav-indicator");
+  if (activeLink && indicator) {
+    indicator.style.width = `${activeLink.offsetWidth}px`;
+    indicator.style.transform = `translateX(${activeLink.offsetLeft}px)`;
+  }
+}
+
+document.querySelectorAll(".main-nav a[href^='#']").forEach(link => link.addEventListener("click", () => {
+  setActiveNavigation(link.getAttribute("href"));
+}));
+window.addEventListener("hashchange", () => setActiveNavigation(location.hash || "#gallery"));
+window.addEventListener("resize", () => setActiveNavigation(location.hash || "#gallery"));
+document.fonts?.ready.then(() => setActiveNavigation(location.hash || "#gallery"));
+
 $("#typeFilters").addEventListener("click", event => {
   const button = event.target.closest("button[data-filter]");
   if (!button) return;
   activeType = button.dataset.filter;
   activeTag = "全部";
+  currentPage = 1;
   document.querySelectorAll(".filter-pill").forEach(item => item.classList.toggle("active", item === button));
   renderTagFilters();
   render();
 });
-$("#searchInput").addEventListener("input", event => { query = event.target.value; render(); });
+$("#searchInput").addEventListener("input", event => { query = event.target.value; currentPage = 1; render(); });
 $("#sortButton").addEventListener("click", () => {
   sortNewest = !sortNewest;
+  currentPage = 1;
   $("#sortButton").innerHTML = `${sortNewest ? "最新收录" : "最早收录"} <span>${sortNewest ? "↓" : "↑"}</span>`;
   render();
 });
-$("#clearFilters").addEventListener("click", () => {
-  activeType = "全部"; activeTag = "全部"; query = ""; $("#searchInput").value = "";
-  document.querySelectorAll(".filter-pill").forEach(item => item.classList.toggle("active", item.dataset.filter === "全部"));
-  renderTagFilters();
-  render();
+document.querySelectorAll(".previous-page").forEach(button => button.addEventListener("click", () => { if (currentPage > 1) { currentPage -= 1; render(); grid.scrollIntoView({ behavior: "smooth", block: "start" }); } }));
+document.querySelectorAll(".next-page").forEach(button => button.addEventListener("click", () => { currentPage += 1; render(); grid.scrollIntoView({ behavior: "smooth", block: "start" }); }));
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const columnCount = columnsPerPage();
+    if (columnCount === lastColumnCount) return;
+    lastColumnCount = columnCount;
+    currentPage = 1;
+    render();
+  }, 120);
 });
-$("#adminButton").addEventListener("click", () => openDrawer());
-$("#closeDrawer").addEventListener("click", closeDrawer);
-$("#cancelForm").addEventListener("click", closeDrawer);
-backdrop.addEventListener("click", closeDrawer);
-$("#assetForm").addEventListener("submit", submitAsset);
-$("#deleteAsset").addEventListener("click", deleteSelected);
 $("#editFromDetail").addEventListener("click", () => { dialog.close(); });
 $("#detailDownload").addEventListener("click", () => downloadAsset(assets.find(asset => asset.id === selectedId)));
 document.querySelectorAll("[data-close-dialog]").forEach(button => button.addEventListener("click", () => dialog.close()));
 dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
-$("#assetImage").addEventListener("change", event => {
-  const file = event.target.files[0];
-  if (!file) return;
-  if (file.size > 2 * 1024 * 1024) { showToast("图片请控制在 2MB 以内"); event.target.value = ""; return; }
-  const reader = new FileReader();
-  reader.onload = () => {
-    pendingImage = reader.result;
-    pendingFileName = file.name;
-    const detector = new Image();
-    detector.onload = () => { pendingResolution = `${detector.naturalWidth} × ${detector.naturalHeight}`; };
-    detector.src = pendingImage;
-    $("#uploadPreview").src = pendingImage;
-    $("#uploadPreview").hidden = false;
-  };
-  reader.readAsDataURL(file);
-});
+dialog.addEventListener("close", () => { detailSequencePreview = null; syncSequenceAnimations(); });
 $("#themeToggle").addEventListener("click", () => document.body.classList.toggle("dark"));
 document.addEventListener("keydown", event => {
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#searchInput").focus(); }
-  if (event.key === "Escape" && drawer.classList.contains("open")) closeDrawer();
+});
+function refreshAssetsFromStorage(force=false) {
+  const assetSnapshot=localStorage.getItem(STORAGE_KEY)||"";
+  const deletedSnapshot=localStorage.getItem(DELETED_ASSETS_KEY)||"";
+  if(!force&&assetSnapshot===lastAssetStorageSnapshot&&deletedSnapshot===lastDeletedStorageSnapshot)return;
+  lastAssetStorageSnapshot=assetSnapshot;
+  lastDeletedStorageSnapshot=deletedSnapshot;
+  assets=loadAssets();
+  if(activeTag!=="全部"&&!availableTags().some(([tag])=>tag===activeTag))activeTag="全部";
+  renderTagFilters();
+  render();
+}
+const contentSyncBridge=$("#contentSyncBridge");
+function requestBridgeContent(){contentSyncBridge?.contentWindow?.postMessage({type:"mewfx-content-request"},"*")}
+contentSyncBridge?.addEventListener("load",requestBridgeContent);
+window.addEventListener("load",requestBridgeContent,{once:true});
+window.addEventListener("message",event=>{
+  if(event.source!==contentSyncBridge?.contentWindow||event.data?.type!=="mewfx-content-snapshot")return;
+  const values=event.data.values||{};
+  let changed=false;
+  [STORAGE_KEY,DELETED_ASSETS_KEY,DELETED_RECORDS_KEY].forEach(key=>{
+    const value=values[key];
+    if(typeof value!=="string"||!value||localStorage.getItem(key)===value)return;
+    localStorage.setItem(key,value);
+    changed=true;
+  });
+  if(changed)refreshAssetsFromStorage(true);
 });
 window.addEventListener("storage", event => {
   if(event.key!==STORAGE_KEY&&event.key!==DELETED_ASSETS_KEY)return;
-  assets=loadAssets();
-  renderTagFilters();
-  render();
+  refreshAssetsFromStorage(true);
 });
-
+contentSyncChannel?.addEventListener("message",event=>{
+  if(event.data?.key===STORAGE_KEY||event.data?.key===DELETED_ASSETS_KEY)refreshAssetsFromStorage(true);
+});
+window.addEventListener("focus",()=>refreshAssetsFromStorage());
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)refreshAssetsFromStorage()});
+setInterval(()=>{if(!document.hidden)refreshAssetsFromStorage()},1200);
 initGeometry();
+initCollectionPreviews();
+setActiveNavigation(location.hash || "#gallery");
 renderTagFilters();
 render();
+lastColumnCount = columnsPerPage();
 detectMissingResolutions();

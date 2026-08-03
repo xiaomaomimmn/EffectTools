@@ -2,3 +2,12 @@
 Thumbs.db
 Desktop.ini
 *.log
+
+# Restricted third-party assets: source links only, never publish these files.
+assets/library/sequences/bdragon-750-fx/
+assets/library/hidden/bdragon-750-fx/
+
+# Import staging and pending-license frame slices stay local until terms are confirmed.
+incoming/*
+!incoming/.gitkeep
+assets/library/sequences/steel-soldier-simple-sfx/

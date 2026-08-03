@@ -1,34 +1,38 @@
-# KITTYME 特效贴图素材库
+# MewFX 特效贴图素材库
 
 一个无依赖的纯前端原型，用于展示和管理特效贴图资源。
 
 ## 使用
 
-直接用浏览器打开 `index.html`。首页右上角是访客投稿入口；私人管理后台为 `admin.html`，不会在首页显示链接。
+直接用浏览器打开 `index.html`。独立管理页面为 `admin.html`，首页不显示投稿或管理入口。
 
 管理页删除已审核素材时只删除展示记录，并把素材 ID 写入删除清单，原图片文件暂时保留。后续可让 AI 根据删除清单统一把对应图片整理到项目垃圾箱。
+
+后台“删除清单”页会按素材出处集中显示资源 ID；新删除记录同时保存资源名称、英文图片路径、大类、出处和删除时间。旧的 Kenney 与 FX Pixel ID 会自动还原对应信息。
 
 当前版本的数据和上传图片保存在浏览器 `localStorage` 中，适合原型验证；清除浏览器站点数据后会丢失。正式部署时建议把素材记录、图片文件、管理员账号与权限迁移到服务端数据库和对象存储。
 
 ## 已实现
 
-- CC0 特效贴图展示、类型筛选、搜索和排序
-- 后台分类：光效、序列、元素、循环、物体、不展示；“不展示”中的素材不会出现在首页
+- 特效贴图展示、版权分级、类型筛选、搜索和排序
+- 后台分类：光效、元素、循环、序列、物体、不展示；“不展示”中的素材不会出现在首页
 - 大类下只展示主要细分标签；次要描述归入详情页二级细分
 - 详情页支持将原图直接下载到本地，并记录图片实际分辨率
 - 大图在卡片中完整居中；实际尺寸不超过 128px 的像素图以四分之一面积锐化预览
 - 贴图详情、标签、格式、分辨率、版权和来源信息
 - 管理员新增、编辑、删除素材记录
-- 投稿进入待审核队列，审核通过后才在首页展示
-- 首页投稿仅需图片、基础分类和来源链接
 - 独立管理员页面与本机管理密码
 - 本地图片上传和浏览器持久化
 - 每次刷新随机选择一种几何形状，带缓慢漂浮和滚动视差
 - 默认深色主题，可切换浅色主题
 - 明暗主题和移动端响应式布局
 
-示例贴图由站内程序化 SVG 生成，仅作为界面演示素材，统一标注为 `KITTYME Original / CC0`。
+示例贴图由站内程序化 SVG 生成，仅作为界面演示素材，统一标注为 `MewFX Original / CC0`。
 
-本地待整理素材放入 `incoming`。`assets/library` 当前有 219 张 CC0 贴图：212 张公开展示，7 张归入 `hidden`。其中 80 张来自 [Kenney Particle Pack](https://kenney.nl/assets/particle-pack)，139 张来自 [FX Pixel Texture](https://bdragon1727.itch.io/fx-pixel-texture)。
+本地待整理素材放入 `incoming`。`assets/library` 当前有 2138 张 PNG：其中 1458 张为 CC0（1451 张公开展示、7 张归入 `hidden`），[CodeManu VFX Free Pack](https://codemanu.itch.io/vfx-free-pack) 有 680 张 CC BY 4.0 Frames，[Unity Free VFX Image Sequences & Flipbooks](https://unity.com/blog/engine-platform/free-vfx-image-sequences-flipbooks) 有 960 张 CC0 烟雾 Frames，另收录 12 张来自 [RPicster/Godot-particle-and-vfx-textures](https://github.com/RPicster/Godot-particle-and-vfx-textures) 的 CC0 光效贴图。两批序列共整理为 26 组 30 FPS 序列，首页共展示 517 个素材条目。“专题合集”另收录 [750 Effect and FX Pixel All](https://bdragon1727.itch.io/750-effect-and-fx-pixel-all) 和 [32x32 Simple SFX](https://steelsoldier.itch.io/32x32-simple-sfx) 等外部资源。
+
+VFX Free Pack 仅导入 `30fps/Frames`，不包含 60 FPS、GIF、Spritesheets 或工程文件。每组序列提供包含署名说明的 Frames ZIP；使用与再分发时必须署名 CodeManu，并保留来源及 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 许可证链接。
+
+`32x32 Simple SFX` 允许用于个人、非商业和商业项目，署名非必须但作者希望尽量署名或附上链接。由于授权页没有明确说明可重新分发素材文件，本站仅展示介绍和作者原页入口。
 
 素材目录统一使用英文路径：`assets/library/<英文大类>/<英文出处名>/`。大类使用 `light-effects`、`sequences`、`elements`、`loops`、`objects`、`hidden`；出处名称使用小写英文短横线格式。

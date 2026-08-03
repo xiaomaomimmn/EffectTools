@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8" /><title>MewFX Content Sync</title></head>
+  <body>
+    <script>
+      (() => {
+        const keys = ["kittyme-assets-v1", "kittyme-deleted-assets-v1", "kittyme-deleted-records-v1"];
+        const channelName = "mewfx-content-bridge-v1";
+        let channel = null;
+        try { if (globalThis.BroadcastChannel) channel = new BroadcastChannel(channelName); } catch {}
+
+        const snapshot = () => Object.fromEntries(keys.map(key => [key, localStorage.getItem(key) || ""]));
+        const sendSnapshot = () => parent.postMessage({ type: "mewfx-content-snapshot", values: snapshot() }, "*");
+        const writeValue = (key, value) => {
+          if (!keys.includes(key) || typeof value !== "string") return;
+          if (value) localStorage.setItem(key, value);
+          else localStorage.removeItem(key);
+        };
+
+        addEventListener("message", event => {
+          if (event.source !== parent) return;
+          if (event.data?.type === "mewfx-content-request") sendSnapshot();
+          if (event.data?.type === "mewfx-content-write") {
+            writeValue(event.data.key, event.data.value);
+            channel?.postMessage({ changedAt: Date.now() });
+            sendSnapshot();
+          }
+        });
+        addEventListener("storage", event => { if (keys.includes(event.key)) sendSnapshot(); });
+        channel?.addEventListener("message", sendSnapshot);
+        sendSnapshot();
+      })();
+    </script>
+  </body>
+</html>

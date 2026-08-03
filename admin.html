@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex,nofollow" />
-    <title>KITTYME · 私人管理后台</title>
+    <title>MewFX · 私人管理后台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -15,7 +15,7 @@
     <section class="login-screen" id="loginScreen">
       <div class="login-card">
         <span class="login-symbol">◇</span>
-        <p>KITTYME PRIVATE SPACE</p>
+        <p>MewFX PRIVATE SPACE</p>
         <h1 id="loginTitle">管理员登录</h1>
         <p class="login-hint" id="loginHint">输入管理密码进入后台。</p>
         <form id="loginForm">
@@ -28,20 +28,21 @@
 
     <div class="admin-shell" id="adminShell" hidden>
       <header class="admin-header">
-        <a class="brand" href="index.html"><span>KITTYME</span></a>
+        <a class="brand" href="index.html"><span>MewFX</span></a>
         <div><span class="private-chip">PRIVATE ADMIN</span><button id="lockAdmin">锁定后台</button></div>
       </header>
 
       <main class="admin-main">
         <section class="admin-intro">
           <div><p>CONTENT STUDIO</p><h1>贴图管理台</h1><span>审核投稿，决定哪些贴图可以出现在首页。</span></div>
-          <div class="admin-stats"><article><strong id="pendingCount">0</strong><span>待审核</span></article><article><strong id="publicCount">0</strong><span>已审核</span></article></div>
+          <div class="admin-stats"><article><strong id="pendingCount">0</strong><span>待审核</span></article><article><strong id="publicCount">0</strong><span>已分类</span></article></div>
         </section>
 
         <nav class="admin-tabs" aria-label="内容分类">
           <button data-admin-tab="pending">待审核 <span id="pendingBadge">0</span></button>
-          <button class="active" data-admin-tab="public">已审核 <span id="publicBadge">0</span></button>
+          <button class="active" data-admin-tab="public">已分类 <span id="publicBadge">0</span></button>
           <button data-admin-tab="uncategorized">未分类 <span id="uncategorizedBadge">0</span></button>
+          <button data-admin-tab="deleted">删除清单 <span id="deletedBadge">0</span></button>
         </nav>
 
         <section class="admin-panel" id="pendingPanel">
@@ -52,19 +53,31 @@
               <button type="button" class="clear-filter" data-clear-filter="submission">清除筛选</button>
               <button type="button" class="sort-filter" data-admin-sort="submission">最新优先 <span>↓</span></button>
             </div>
-            <p class="filter-result" data-filter-result="submission"></p>
+            <div class="admin-list-meta">
+              <p class="filter-result" data-filter-result="submission"></p>
+              <nav class="admin-pagination admin-pagination-top" data-admin-pagination="submission" aria-label="待审核顶部分页" hidden>
+                <button type="button" data-admin-page-action="previous" aria-label="上一页">←</button>
+                <div class="admin-page-numbers"></div>
+                <button type="button" data-admin-page-action="next" aria-label="下一页">→</button>
+                <span class="admin-page-summary"></span>
+              </nav>
+            </div>
           </div>
           <div class="bulk-edit-bar">
-            <label class="select-visible"><input type="checkbox" data-select-visible="submission" /><span>选择当前结果</span></label>
             <strong>已选 <span data-selected-count="submission">0</span> 项</strong>
-            <label><span>贴图大类</span><select data-bulk-type="submission"><option value="">保持原大类</option><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option><option>不展示</option></select></label>
-            <label><span>主要细分类</span><input data-bulk-primary="submission" list="submissionPrimaryList" placeholder="保持原细分类" /></label>
-            <datalist id="submissionPrimaryList"></datalist>
+            <label><span>贴图大类</span><select data-bulk-type="submission"><option value="">保持原大类</option><option>光效</option><option>元素</option><option>循环</option><option>序列</option><option>物体</option><option>不展示</option></select></label>
+            <label><span>主要细分类</span><select data-bulk-primary="submission"><option value="">保持原细分类</option><option value="__custom__">＋ 自定义细分类…</option></select><input data-bulk-primary-custom="submission" placeholder="输入自定义细分类" hidden /></label>
             <button type="button" class="bulk-delete" data-bulk-delete="submission" disabled>批量删除</button>
             <button type="button" class="apply-bulk" data-apply-bulk="submission" disabled>批量应用</button>
           </div>
           <div class="admin-grid" id="submissionGrid"></div>
           <div class="admin-empty" id="submissionEmpty" hidden><span>✓</span><h3>投稿都处理完啦</h3><p>新的投稿会出现在这里。</p></div>
+          <nav class="admin-pagination admin-pagination-bottom" data-admin-pagination="submission" aria-label="待审核底部分页" hidden>
+            <button type="button" data-admin-page-action="previous" aria-label="上一页">←</button>
+            <div class="admin-page-numbers"></div>
+            <button type="button" data-admin-page-action="next" aria-label="下一页">→</button>
+            <span class="admin-page-summary"></span>
+          </nav>
         </section>
         <section class="admin-panel active" id="publicPanel">
           <div class="admin-list-tools">
@@ -74,19 +87,39 @@
               <button type="button" class="clear-filter" data-clear-filter="asset">清除筛选</button>
               <button type="button" class="sort-filter" data-admin-sort="asset">最新优先 <span>↓</span></button>
             </div>
-            <p class="filter-result" data-filter-result="asset"></p>
+            <div class="admin-list-meta">
+              <p class="filter-result" data-filter-result="asset"></p>
+              <nav class="admin-pagination admin-pagination-top" data-admin-pagination="asset" aria-label="素材顶部分页" hidden>
+                <button type="button" data-admin-page-action="previous" aria-label="上一页">←</button>
+                <div class="admin-page-numbers"></div>
+                <button type="button" data-admin-page-action="next" aria-label="下一页">→</button>
+                <span class="admin-page-summary"></span>
+              </nav>
+            </div>
           </div>
           <div class="bulk-edit-bar">
-            <label class="select-visible"><input type="checkbox" data-select-visible="asset" /><span>选择当前结果</span></label>
             <strong>已选 <span data-selected-count="asset">0</span> 项</strong>
-            <label><span>贴图大类</span><select data-bulk-type="asset"><option value="">保持原大类</option><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option><option>不展示</option></select></label>
-            <label><span>主要细分类</span><input data-bulk-primary="asset" list="assetPrimaryList" placeholder="保持原细分类" /></label>
-            <datalist id="assetPrimaryList"></datalist>
+            <label><span>贴图大类</span><select data-bulk-type="asset"><option value="">保持原大类</option><option>光效</option><option>元素</option><option>循环</option><option>序列</option><option>物体</option><option>不展示</option></select></label>
+            <label><span>主要细分类</span><select data-bulk-primary="asset"><option value="">保持原细分类</option><option value="__custom__">＋ 自定义细分类…</option></select><input data-bulk-primary-custom="asset" placeholder="输入自定义细分类" hidden /></label>
             <button type="button" class="bulk-delete" data-bulk-delete="asset" disabled>批量删除</button>
             <button type="button" class="apply-bulk" data-apply-bulk="asset" disabled>批量应用</button>
           </div>
           <div class="admin-grid" id="publicGrid"></div>
-          <div class="admin-empty" id="publicEmpty" hidden><span>☁</span><h3>还没有展示内容</h3></div>
+          <div class="admin-empty" id="publicEmpty" hidden><span>☁</span><h3>还没有已分类内容</h3></div>
+          <nav class="admin-pagination admin-pagination-bottom" data-admin-pagination="asset" aria-label="素材底部分页" hidden>
+            <button type="button" data-admin-page-action="previous" aria-label="上一页">←</button>
+            <div class="admin-page-numbers"></div>
+            <button type="button" data-admin-page-action="next" aria-label="下一页">→</button>
+            <span class="admin-page-summary"></span>
+          </nav>
+        </section>
+        <section class="admin-panel" id="deletedPanel">
+          <div class="deleted-toolbar">
+            <div><small>DELETED RESOURCES</small><h2>待处理资源删除清单</h2><p>确认文件已删除后，该记录会从这里隐藏，但仍会保留防止素材重新出现的删除标记。</p></div>
+            <button type="button" id="copyDeletedIds">复制全部待处理 ID</button>
+          </div>
+          <div class="deleted-groups" id="deletedGroups"></div>
+          <div class="admin-empty" id="deletedEmpty" hidden><span>✓</span><h3>没有待处理的删除记录</h3><p>新删除的已审核素材会记录在这里。</p></div>
         </section>
       </main>
     </div>
@@ -100,7 +133,7 @@
           <label class="editor-image-field"><input id="editorImageInput" type="file" accept="image/*" /><img id="editorPreview" alt="贴图预览" /><span>点击替换图片</span></label>
           <div class="form-grid">
             <label class="field field-wide"><span>贴图名称 *</span><input id="editorName" required /></label>
-            <label class="field"><span>贴图大类 *</span><select id="editorType"><option>光效</option><option>序列</option><option>元素</option><option>循环</option><option>物体</option><option>不展示</option></select></label>
+            <label class="field"><span>贴图大类 *</span><select id="editorType"><option>光效</option><option>元素</option><option>循环</option><option>序列</option><option>物体</option><option>不展示</option></select></label>
             <label class="field"><span>版权分级 *</span><select id="editorLicense"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option><option>自有版权</option><option>待核实</option></select></label>
             <label class="field field-wide"><span>细分标签</span><input id="editorTags" placeholder="魔法, 蓝色, 循环" /><small>第一个为主要细分，后续标签归入二级细分</small></label>
             <label class="field"><span>素材出处</span><input id="editorSource" /></label>
@@ -115,6 +148,10 @@
     </dialog>
 
     <div class="toast" id="adminToast"><span>✓</span><p>已保存</p></div>
-    <script src="admin.js"></script>
+  <iframe id="contentSyncBridge" src="sync-bridge.html" title="内容同步" hidden></iframe>
+  <script src="codemanu-assets.js"></script>
+  <script src="unity-smoke-assets.js"></script>
+  <script src="rpicster-assets.js"></script>
+  <script src="admin.js"></script>
   </body>
 </html>
