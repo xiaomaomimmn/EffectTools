@@ -141,6 +141,7 @@ CodeManu 制作的 2D 特效序列包，按 CC BY 4.0 收录并在首页以 30 F
 - 未导入内容：60 FPS、GIF、Spritesheets、SMP 工程文件
 - 下载形式：每组独立 Frames ZIP，ZIP 内附 `ATTRIBUTION.md`
 - 首页展示：每组作为一张“序列”卡片，以 30 FPS 循环预览
+- 网页预览：128 × 128、15 FPS 透明动画 WebP；不影响原始 Frames 下载
 
 ## Free VFX Image Sequences & Flipbooks
 

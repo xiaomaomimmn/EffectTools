@@ -33,6 +33,8 @@
 
 VFX Free Pack 仅导入 `30fps/Frames`，不包含 60 FPS、GIF、Spritesheets 或工程文件。每组序列提供包含署名说明的 Frames ZIP；使用与再分发时必须署名 CodeManu，并保留来源及 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) 许可证链接。
 
+网页中的序列缩略预览统一使用 128 × 128、15 FPS 的透明动画 WebP，以降低访客端的网络和解码压力；原始下载仍保留完整分辨率与 30 FPS 帧。
+
 `32x32 Simple SFX` 允许用于个人、非商业和商业项目，署名非必须但作者希望尽量署名或附上链接。由于授权页没有明确说明可重新分发素材文件，本站仅展示介绍和作者原页入口。
 
 素材目录统一使用英文路径：`assets/library/<英文大类>/<英文出处名>/`。大类使用 `light-effects`、`sequences`、`elements`、`loops`、`objects`、`hidden`；出处名称使用小写英文短横线格式。
