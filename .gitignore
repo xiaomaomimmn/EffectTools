@@ -10,4 +10,7 @@ assets/library/hidden/bdragon-750-fx/
 # Import staging and pending-license frame slices stay local until terms are confirmed.
 incoming/*
 !incoming/.gitkeep
+incoming-preview-contact.png
 assets/library/sequences/steel-soldier-simple-sfx/
+assets/library/sequences/unity-wispy-smoke/wispy-smoke-01/preview-lossy.webp
+assets/library/sequences/unity-wispy-smoke/wispy-smoke-01/preview-small.webp

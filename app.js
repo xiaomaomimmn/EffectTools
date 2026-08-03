@@ -573,7 +573,8 @@ function svgData(asset) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
-function imageFor(asset) { return asset.image || svgData(asset); }
+function animatedPreviewFor(asset) { return asset.animatedPreview || bundledAssetById.get(asset.id)?.animatedPreview || ""; }
+function imageFor(asset) { return animatedPreviewFor(asset) || asset.image || svgData(asset); }
 
 function updateSequenceAnimations(timestamp) {
   const previews = detailSequencePreview ? [...sequenceCardPreviews, detailSequencePreview] : sequenceCardPreviews;
@@ -778,7 +779,7 @@ function render() {
       <div class="card-preview">
         <span class="card-index">${String(startIndex + i + 1).padStart(2, "0")}</span>
         <span class="card-license">${escapeHtml(asset.license)}</span>
-        <img class="asset-preview" src="${imageFor(asset)}" alt="${escapeHtml(asset.name)} 特效贴图预览" loading="lazy" />
+        <img class="asset-preview" src="${imageFor(asset)}"${animatedPreviewFor(asset)&&asset.image?` data-fallback-src="${escapeHtml(asset.image)}"`:""} alt="${escapeHtml(asset.name)} 特效贴图预览" loading="lazy" />
       </div>
       <div class="card-info"><div><h3>${escapeHtml(asset.name)}</h3><p>${asset.tags.slice(0, 3).map(escapeHtml).join(" · ")}</p></div><span>${escapeHtml(asset.type)}</span></div>
     </article>`).join("");
@@ -790,7 +791,7 @@ function render() {
     card.addEventListener("click", () => openDetail(card.dataset.id));
     card.addEventListener("keydown", e => { if (e.key === "Enter") openDetail(card.dataset.id); });
     const asset = assets.find(item => item.id === card.dataset.id);
-    if (asset?.sequenceFrames?.length > 1) {
+    if (asset?.sequenceFrames?.length > 1 && !animatedPreviewFor(asset)) {
       const image = card.querySelector(".asset-preview");
       sequenceCardPreviews.push({
         frames: asset.sequenceFrames,
@@ -801,6 +802,10 @@ function render() {
     }
   });
   grid.querySelectorAll(".asset-preview").forEach(image => {
+    image.addEventListener("error",()=>{
+      const fallback=image.dataset.fallbackSrc;
+      if(fallback&&image.getAttribute("src")!==fallback)image.src=fallback;
+    },{once:true});
     const applyPreviewMode = () => {
       const asset = assets.find(item => item.id === image.closest(".asset-card")?.dataset.id);
       const isPixelAsset = asset?.type !== "序列" && image.naturalWidth < 128 && image.naturalHeight < 128;
@@ -819,7 +824,9 @@ function openDetail(id) {
   selectedId = id;
   const smallAsset = isSmallAsset(asset);
   const dimensions = assetDimensions(asset);
-  const hasSequencePreview = asset.sequenceFrames?.length > 1;
+  const hasAnimatedPreview = Boolean(animatedPreviewFor(asset));
+  const hasSequencePreview = asset.sequenceFrames?.length > 1 && !hasAnimatedPreview;
+  const displaysSequenceImage = hasAnimatedPreview || hasSequencePreview;
   const detailPreview = $("#detailPreview");
   const detailSequenceImage = $("#detailSequenceImage");
   const previewScale = asset.type === "序列" && !asset.externalOnly ? 92 : smallAsset ? 50 : 72;
@@ -827,11 +834,12 @@ function openDetail(id) {
   dialog.classList.toggle("sequence-asset-detail", asset.type === "序列" && !asset.externalOnly);
   dialog.classList.toggle("smooth-sequence-detail", Boolean(asset.smoothPreview || asset.id.startsWith("codemanu-vfx-")));
   dialog.classList.toggle("dark-asset-detail", Boolean(asset.darkPreview));
-  detailSequenceImage.hidden = !hasSequencePreview;
-  detailSequenceImage.alt = hasSequencePreview ? `${asset.name} 序列预览` : "";
-  if(hasSequencePreview)detailSequenceImage.src = imageFor(asset);
+  detailSequenceImage.hidden = !displaysSequenceImage;
+  detailSequenceImage.alt = displaysSequenceImage ? `${asset.name} 序列预览` : "";
+  detailSequenceImage.onerror=displaysSequenceImage&&asset.image?()=>{detailSequenceImage.onerror=null;detailSequenceImage.src=asset.image}:null;
+  if(displaysSequenceImage)detailSequenceImage.src = imageFor(asset);
   else detailSequenceImage.removeAttribute("src");
-  detailPreview.style.backgroundImage = hasSequencePreview ? "none" : `url("${imageFor(asset)}")`;
+  detailPreview.style.backgroundImage = displaysSequenceImage ? "none" : `url("${imageFor(asset)}")`;
   detailPreview.style.backgroundSize = dimensions && dimensions.height > dimensions.width
     ? `auto ${previewScale}%`
     : `${previewScale}% auto`;

@@ -691,6 +691,8 @@ function enableDragSelection(grid,mode) {
   });
 }
 function previewImageFor(item) {
+  const animatedPreview=item.animatedPreview||[...codeManuVfxAssets,...unityWispySmokeAssets].find(asset=>String(asset.id)===String(item.id))?.animatedPreview;
+  if(animatedPreview)return animatedPreview;
   const frames=Array.isArray(item.sequenceFrames)?item.sequenceFrames.filter(Boolean):[];
   return frames.length?frames[Math.floor(frames.length/2)]:(item.image||"");
 }
@@ -732,7 +734,8 @@ function cardHtml(item, mode) {
   const id=String(item.id);
   const frames=Array.isArray(item.sequenceFrames)?item.sequenceFrames.filter(Boolean):[];
   const previewImage=previewImageFor(item);
-  const image = previewImage ? `<img class="review-preview" src="${previewImage}" alt="${escapeHtml(item.name)}" loading="lazy"${frames.length>1?` data-sequence-preview="${escapeHtml(id)}"`:""} />` : `<span>程序生成预览</span>`;
+  const hasAnimatedPreview=Boolean(item.animatedPreview||[...codeManuVfxAssets,...unityWispySmokeAssets].find(asset=>String(asset.id)===id)?.animatedPreview);
+  const image = previewImage ? `<img class="review-preview" src="${previewImage}" alt="${escapeHtml(item.name)}" loading="lazy"${frames.length>1&&!hasAnimatedPreview?` data-sequence-preview="${escapeHtml(id)}"`:""} />` : `<span>程序生成预览</span>`;
   const source = [item.source, item.sourceUrl].filter(Boolean).map(escapeHtml).join("<br>") || "未填写";
   const selected=selectedItems[mode].has(id);
   return `<article class="review-card${isSmallAsset(item)?" review-card-pixel":""}${selected?" selected":""}"><label class="card-selector" title="选择 ${escapeHtml(item.name)}"><input type="checkbox" data-card-select="${mode}" value="${escapeHtml(id)}" ${selected?"checked":""} aria-label="选择 ${escapeHtml(item.name)}" /></label><div class="review-image">${image}</div><div class="review-body"><div class="review-top"><h3>${escapeHtml(item.name)}</h3><span>${escapeHtml(item.license||"待核实")}</span></div><p class="review-meta">${escapeHtml(item.type||"其他")} · ${(item.tags||[]).map(escapeHtml).join(" / ")||"无标签"}</p><div class="review-source"><strong>出处：</strong><br>${source}</div><div class="review-actions">${mode==="submission"?`<button class="reject" data-reject="${escapeHtml(id)}">不收录</button><button class="approve" data-review="${escapeHtml(id)}">审核并发布</button>`:`<button class="edit" data-edit-asset="${escapeHtml(id)}">编辑资料</button>`}</div></div></article>`;
