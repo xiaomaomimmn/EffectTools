@@ -450,7 +450,7 @@ let assets = loadAssets();
 try { localStorage.setItem(STORAGE_KEY, JSON.stringify(assets)); localStorage.setItem(HIDDEN_TYPE_MIGRATION_KEY,"1"); } catch {}
 let lastAssetStorageSnapshot = localStorage.getItem(STORAGE_KEY) || "";
 let lastDeletedStorageSnapshot = localStorage.getItem(DELETED_ASSETS_KEY) || "";
-let activeType = "全部";
+let activeType = "光效";
 let activeTag = "全部";
 let query = "";
 let sortNewest = true;
