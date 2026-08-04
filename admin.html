@@ -38,6 +38,18 @@
           <div class="admin-stats"><article><strong id="pendingCount">0</strong><span>待审核</span></article><article><strong id="publicCount">0</strong><span>已分类</span></article></div>
         </section>
 
+        <section class="site-setting-card catalog-setting-card" aria-labelledby="catalogSettingTitle">
+          <div class="catalog-setting-icon" aria-hidden="true">{ }</div>
+          <div>
+            <small>GIT CATALOG</small>
+            <h2 id="catalogSettingTitle">网站目录 JSON</h2>
+            <p id="catalogStatus">正在读取仓库目录…</p>
+            <p>编辑完成后导出，并替换 <code>assets/library/catalog.json</code> 再提交 Git。</p>
+          </div>
+          <button class="admin-file-button" id="exportCatalog" type="button">导出目录 JSON</button>
+          <label class="admin-file-button">导入并覆盖<input id="importCatalog" type="file" accept="application/json,.json" /></label>
+        </section>
+
         <nav class="admin-tabs" aria-label="内容分类">
           <button data-admin-tab="pending">待审核 <span id="pendingBadge">0</span></button>
           <button class="active" data-admin-tab="public">已分类 <span id="publicBadge">0</span></button>

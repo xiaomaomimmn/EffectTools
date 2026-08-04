@@ -8,6 +8,8 @@ const UNITY_SMOKE_CC0_MIGRATION_KEY = "mewfx-unity-smoke-cc0-migrated-v2";
 const RPICSTER_TAXONOMY_MIGRATION_KEY = "mewfx-rpicster-taxonomy-migrated-v1";
 const RPICSTER_CC0_MIGRATION_KEY = "mewfx-rpicster-cc0-migrated-v1";
 const CONTENT_SYNC_CHANNEL_NAME = "mewfx-content-sync-v1";
+const CATALOG_URL = "assets/library/catalog.json";
+const CATALOG_VERSION = 1;
 let contentSyncChannel = null;
 try { if(globalThis.BroadcastChannel)contentSyncChannel=new BroadcastChannel(CONTENT_SYNC_CHANNEL_NAME); } catch {}
 const PERMANENTLY_DELETED_ASSET_IDS = new Set([
@@ -964,6 +966,30 @@ function refreshAssetsFromStorage(force=false) {
   renderTagFilters();
   render();
 }
+function validateRepositoryCatalog(value) {
+  if(!value||typeof value!=="object"||value.version!==CATALOG_VERSION||!Array.isArray(value.assets)||!Array.isArray(value.deletedAssetIds))throw new Error("Invalid catalog");
+  const ids=new Set();
+  const catalogAssets=value.assets.map(item=>{
+    const id=String(item?.id||"").trim();
+    if(!id||ids.has(id))throw new Error("Invalid or duplicate asset id");
+    ids.add(id);
+    return {...item,id};
+  });
+  return {assets:catalogAssets,deletedAssetIds:[...new Set(value.deletedAssetIds.map(String))]};
+}
+async function loadRepositoryCatalog() {
+  try {
+    const response=await fetch(CATALOG_URL,{cache:"no-store"});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const catalog=validateRepositoryCatalog(await response.json());
+    const deletedIds=[...new Set([...catalog.deletedAssetIds,...PERMANENTLY_DELETED_ASSET_IDS])];
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(catalog.assets));
+    localStorage.setItem(DELETED_ASSETS_KEY,JSON.stringify(deletedIds));
+    refreshAssetsFromStorage(true);
+  } catch {
+    // file:// and offline views keep using the bundled assets or the last browser copy.
+  }
+}
 const contentSyncBridge=$("#contentSyncBridge");
 function requestBridgeContent(){contentSyncBridge?.contentWindow?.postMessage({type:"mewfx-content-request"},"*")}
 contentSyncBridge?.addEventListener("load",requestBridgeContent);
@@ -997,3 +1023,4 @@ renderTagFilters();
 render();
 lastColumnCount = columnsPerPage();
 detectMissingResolutions();
+loadRepositoryCatalog();

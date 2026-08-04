@@ -16,6 +16,8 @@ const PERMANENTLY_DELETED_ASSET_IDS = new Set([
 ]);
 const PHYSICAL_DELETION_MIGRATION_KEY = "kittyme-physical-deletions-resolved-v1";
 const CONTENT_SYNC_CHANNEL_NAME = "mewfx-content-sync-v1";
+const CATALOG_URL = "assets/library/catalog.json";
+const CATALOG_VERSION = 1;
 const DEFAULT_PREVIEW = "assets/asset-placeholder.svg";
 const $ = selector => document.querySelector(selector);
 let contentSyncChannel = null;
@@ -315,6 +317,93 @@ function readList(key) {
   catch { return []; }
 }
 function writeList(key, value) { localStorage.setItem(key, JSON.stringify(value)); notifyContentChange(key); }
+function buildCatalogPayload() {
+  let deletedAssetIds=[];
+  try {
+    const value=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]");
+    if(Array.isArray(value))deletedAssetIds=value.map(String);
+  } catch {}
+  return {
+    version:CATALOG_VERSION,
+    exportedAt:new Date().toISOString(),
+    assets:assets.map(item=>structuredClone(item)),
+    deletedAssetIds:[...new Set([...deletedAssetIds,...PERMANENTLY_DELETED_ASSET_IDS])]
+  };
+}
+function validateCatalogPayload(value) {
+  if(!value||typeof value!=="object"||Array.isArray(value))throw new Error("JSON 顶层必须是对象");
+  if(value.version!==CATALOG_VERSION)throw new Error(`仅支持 version ${CATALOG_VERSION}`);
+  if(!Array.isArray(value.assets))throw new Error("缺少 assets 数组");
+  if(!Array.isArray(value.deletedAssetIds))throw new Error("缺少 deletedAssetIds 数组");
+  const ids=new Set();
+  const normalizedAssets=value.assets.map((item,index)=>{
+    if(!item||typeof item!=="object"||Array.isArray(item))throw new Error(`assets[${index}] 不是有效对象`);
+    const id=String(item.id||"").trim();
+    if(!id)throw new Error(`assets[${index}] 缺少 id`);
+    if(ids.has(id))throw new Error(`素材 id 重复：${id}`);
+    ids.add(id);
+    return {...item,id};
+  });
+  return {
+    version:CATALOG_VERSION,
+    exportedAt:typeof value.exportedAt==="string"?value.exportedAt:"",
+    assets:normalizedAssets,
+    deletedAssetIds:[...new Set(value.deletedAssetIds.map(id=>String(id).trim()).filter(Boolean))]
+  };
+}
+function setCatalogStatus(message) {
+  const target=$("#catalogStatus");
+  if(target)target.textContent=message;
+}
+function downloadCatalogJson() {
+  const payload=buildCatalogPayload();
+  const blob=new Blob([`${JSON.stringify(payload,null,2)}\n`],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download="catalog.json";
+  link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),0);
+  setCatalogStatus(`已导出 ${payload.assets.length} 项；请替换仓库中的 catalog.json`);
+  showToast("目录 JSON 已导出");
+}
+function applyCatalogPayload(value,{announce=false}={}) {
+  const payload=validateCatalogPayload(value);
+  const deletedIds=[...new Set([...payload.deletedAssetIds,...PERMANENTLY_DELETED_ASSET_IDS])];
+  const deletedSet=new Set(deletedIds);
+  const nextAssets=payload.assets.filter(item=>!deletedSet.has(String(item.id)));
+  const previousRecords=new Map(readDeletedRecords().map(item=>[String(item.id),item]));
+  const nextRecords=deletedIds.map(id=>previousRecords.get(id)||inferDeletedRecord(id));
+  writeList(ASSETS_KEY,nextAssets);
+  localStorage.setItem(DELETED_ASSETS_KEY,JSON.stringify(deletedIds));
+  localStorage.setItem(DELETED_RECORDS_KEY,JSON.stringify(nextRecords));
+  notifyContentChange(DELETED_ASSETS_KEY);
+  notifyContentChange(DELETED_RECORDS_KEY);
+  assets=readList(ASSETS_KEY);
+  selectedItems.asset.clear();
+  pageState.asset=1;
+  if(!$("#adminShell").hidden)render();
+  const time=payload.exportedAt?`，导出于 ${new Date(payload.exportedAt).toLocaleString("zh-CN")}`:"";
+  setCatalogStatus(`已载入 ${assets.length} 项${time}`);
+  if(announce)showToast(`已导入 ${assets.length} 项素材`);
+  return payload;
+}
+async function loadRepositoryCatalog() {
+  try {
+    const response=await fetch(CATALOG_URL,{cache:"no-store"});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    applyCatalogPayload(await response.json());
+  } catch {
+    setCatalogStatus(location.protocol==="file:"?"本地文件模式无法读取仓库 JSON，当前使用浏览器数据":"仓库 JSON 读取失败，当前使用浏览器数据");
+  }
+}
+async function importCatalogFile(file) {
+  const payload=validateCatalogPayload(JSON.parse(await file.text()));
+  const currentCount=assets.length;
+  const deletedCount=payload.deletedAssetIds.length;
+  if(!confirm(`将用 JSON 中的 ${payload.assets.length} 项素材覆盖当前 ${currentCount} 项，并同步 ${deletedCount} 个删除标记。确认继续吗？`))return;
+  applyCatalogPayload(payload,{announce:true});
+}
 function importSubmittedAssets(rawValue) {
   try {
     const incoming=JSON.parse(rawValue||"[]");
@@ -905,7 +994,17 @@ window.addEventListener("resize",()=>{
 });
 document.addEventListener("visibilitychange",syncAdminSequenceAnimation);
 
+$("#exportCatalog").addEventListener("click",downloadCatalogJson);
+$("#importCatalog").addEventListener("change",async event=>{
+  const file=event.target.files?.[0];
+  if(!file)return;
+  try { await importCatalogFile(file); }
+  catch(error){setCatalogStatus(`导入失败：${error.message}`);showToast("目录 JSON 格式不正确")}
+  finally { event.target.value=""; }
+});
+
 configureLogin();
+loadRepositoryCatalog();
 const ADMIN_SYNC_TOKEN=new URLSearchParams(location.hash.slice(1)).get("sync")||"";
 window.addEventListener("message",event=>{
   if(!ADMIN_SYNC_TOKEN||event.source!==window.opener||event.data?.type!=="kittyme-submissions-sync"||event.data.token!==ADMIN_SYNC_TOKEN||typeof event.data.submissions!=="string")return;
