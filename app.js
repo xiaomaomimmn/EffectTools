@@ -7,6 +7,7 @@ const DELETION_LEDGER_MIGRATION_KEY = "kittyme-deletion-ledger-migrated-v3";
 const UNITY_SMOKE_CC0_MIGRATION_KEY = "mewfx-unity-smoke-cc0-migrated-v2";
 const RPICSTER_TAXONOMY_MIGRATION_KEY = "mewfx-rpicster-taxonomy-migrated-v1";
 const RPICSTER_CC0_MIGRATION_KEY = "mewfx-rpicster-cc0-migrated-v1";
+const OPENGAMEART_CC0_MIGRATION_KEY = "mewfx-opengameart-cc0-migrated-v1";
 const CONTENT_SYNC_CHANNEL_NAME = "mewfx-content-sync-v1";
 const CATALOG_URL = "assets/library/catalog.json";
 const CATALOG_VERSION = 1;
@@ -14,7 +15,16 @@ let contentSyncChannel = null;
 try { if(globalThis.BroadcastChannel)contentSyncChannel=new BroadcastChannel(CONTENT_SYNC_CHANNEL_NAME); } catch {}
 const PERMANENTLY_DELETED_ASSET_IDS = new Set([
   "fx-001","fx-002","fx-003","fx-004","fx-005","fx-006","fx-007","fx-008",
-  "pixel-fx-32x32-grow-08","pixel-fx-32x32-grow-09","pixel-fx-32x32-grow-10","pixel-fx-32x32-grow-11","pixel-fx-32x32-grow-12"
+  "pixel-fx-32x32-grow-08","pixel-fx-32x32-grow-09","pixel-fx-32x32-grow-10","pixel-fx-32x32-grow-11","pixel-fx-32x32-grow-12",
+  ...(globalThis.RETIRED_ASSET_IDS || [])
+]);
+const COLLECTION_ONLY_ASSET_IDS = new Set([
+  "cartoon-smoke-chemical-smoke",
+  "cartoon-smoke-poisonous-smoke",
+  "cartoon-smoke-smoke",
+  "cartoon-smoke-smoke-blow",
+  "cartoon-smoke-smoke-explosion",
+  "cartoon-smoke-smoke-spell"
 ]);
 
 const TYPE_MIGRATION = { "烟雾": "元素", "粒子": "元素", "能量": "元素", "扭曲": "循环", "其他": "物体" };
@@ -253,6 +263,12 @@ const bdragon750SequenceAssets = [];
 const codeManuVfxAssets = globalThis.CODEMANU_VFX_ASSETS || [];
 const unityWispySmokeAssets = globalThis.UNITY_WISPY_SMOKE_ASSETS || [];
 const rpicsterVfxAssets = globalThis.RPICSTER_VFX_ASSETS || [];
+const gothicvaniaMagicAssets = globalThis.GOTHICVANIA_MAGIC_ASSETS || [];
+const hitAnimationAssets = globalThis.HIT_ANIMATION_ASSETS || [];
+const fireSmokeAnimationAssets = globalThis.FIRE_SMOKE_ANIMATION_ASSETS || [];
+const lensFlareParticleAssets = globalThis.LENS_FLARE_PARTICLE_ASSETS || [];
+const fxChargeAssets = globalThis.FX_CHARGE_ASSETS || [];
+const kronbitsParticleAssets = globalThis.KRONBITS_PARTICLE_ASSETS || [];
 
 const PIXEL_FX_SOURCE = "https://bdragon1727.itch.io/fx-pixel-texture";
 const PIXEL_FX_GROUPS = [
@@ -323,8 +339,23 @@ const retiredDefaultTestAssets = [
 const seedAssets = [];
 
 const legacyBundledAssets = [...kenneyAssets, ...pixelFxAssets, ...pixelFxAtlasAssets];
-const bundledAssets = [...legacyBundledAssets, ...kenneyPatternAssets, ...kenneySplatAssets, ...kenneyLightMaskAssets, ...bdragon750SequenceAssets, ...codeManuVfxAssets, ...unityWispySmokeAssets, ...rpicsterVfxAssets];
+const bundledAssets = [...legacyBundledAssets, ...kenneyPatternAssets, ...kenneySplatAssets, ...kenneyLightMaskAssets, ...bdragon750SequenceAssets, ...codeManuVfxAssets, ...unityWispySmokeAssets, ...rpicsterVfxAssets, ...gothicvaniaMagicAssets, ...hitAnimationAssets, ...fireSmokeAnimationAssets, ...lensFlareParticleAssets, ...fxChargeAssets, ...kronbitsParticleAssets];
 const bundledAssetById = new Map(bundledAssets.map(asset => [asset.id, asset]));
+
+function migrateOpenGameArtCc0() {
+  if(localStorage.getItem(OPENGAMEART_CC0_MIGRATION_KEY))return;
+  try {
+    const canonicalById=new Map([...hitAnimationAssets,...fireSmokeAnimationAssets].map(item=>[String(item.id),item]));
+    const list=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    if(Array.isArray(list)){
+      const updated=list.map(item=>canonicalById.has(String(item.id))?{...item,...canonicalById.get(String(item.id))}:item);
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));
+    }
+    localStorage.setItem(OPENGAMEART_CC0_MIGRATION_KEY,"1");
+  } catch {}
+}
+
+migrateOpenGameArtCc0();
 
 function migrateDeletionLedger() {
   if(localStorage.getItem(DELETION_LEDGER_MIGRATION_KEY))return;
@@ -434,6 +465,8 @@ const $ = (selector) => document.querySelector(selector);
 const grid = $("#assetGrid");
 const dialog = $("#assetDialog");
 const COLLECTION_PREVIEW_URLS = {
+  "pixel-fire": "https://img.itch.zone/aW1nLzIyMTgyNDI5LmdpZg==/original/rXdi%2Bu.gif",
+  "cartoon-smoke": "https://img.craftpix.net/2026/05/Free-Cartoon-Smoke-Effects-Asset-Pack.gif",
   "bdragon-750": "https://img.itch.zone/aW1hZ2UvMjkzODMwMS8xNzYwMzU0NC5naWY=/original/0gFHAh.gif",
   "simple-sfx": "https://img.itch.zone/aW1nLzI3ODQ5ODgxLmdpZg==/original/7mNZvK.gif"
 };
@@ -462,11 +495,12 @@ function loadAssets() {
     const saved = JSON.parse(raw);
     const list = (Array.isArray(saved) ? saved : structuredClone(seedAssets))
       .filter(asset => !deletedIds.has(String(asset.id)))
+      .filter(asset => !COLLECTION_ONLY_ASSET_IDS.has(String(asset.id)))
       .filter(asset => !String(asset.id).startsWith("bdragon-750-sequence-") && asset.id !== "bdragon-750-source");
     const migrateHiddenType=!localStorage.getItem(HIDDEN_TYPE_MIGRATION_KEY);
     const normalized = list.map(asset => {
       const bundled = bundledAssetById.get(asset.id);
-      const hasCanonicalLicense=String(asset.id).startsWith("unity-wispy-smoke-")||String(asset.id).startsWith("rpicster-");
+      const hasCanonicalLicense=String(asset.id).startsWith("unity-wispy-smoke-")||String(asset.id).startsWith("rpicster-")||String(asset.id).startsWith("gothicvania-magic-");
       const canonicalLicense=hasCanonicalLicense&&bundled?{
         license:bundled.license,
         licenseUrl:bundled.licenseUrl,
@@ -477,12 +511,13 @@ function loadAssets() {
         downloadFileName:bundled.downloadFileName
       }:{};
       return {
+        ...bundled,
         ...asset,
         ...canonicalLicense,
-        type: migrateHiddenType&&asset.id?.startsWith("pixel-fx-atlas-")&&asset.type==="物体"&&!(asset.tags||[]).length?"不展示":normalizeType(asset.type),
+        type: migrateHiddenType&&asset.id?.startsWith("pixel-fx-atlas-")&&asset.type==="物体"&&!(asset.tags||[]).length?"不展示":normalizeType(asset.type||bundled?.type),
         resolution: bundled?.resolution || asset.resolution,
-        source: ["Lumina Original", "KITTYME Original"].includes(asset.source) ? "MewFX Original" : asset.source,
-        image: bundled?.image || normalizeLibraryPath(asset.image),
+        source: ["Lumina Original", "KITTYME Original"].includes(asset.source) ? "MewFX Original" : (asset.source||bundled?.source),
+        image: bundled?.image || normalizeLibraryPath(asset.image||""),
         collectedAt: bundled?.collectedAt || asset.collectedAt || asset.createdAt
       };
     });
@@ -608,23 +643,42 @@ function isSmallAsset(asset) {
   return Boolean(asset.type !== "序列" && dimensions && dimensions.width < 128 && dimensions.height < 128);
 }
 
-function collectionTime(asset) {
-  const value = asset.collectedAt || asset.createdAt || asset.submittedAt || "";
-  const timestamp = Date.parse(value);
-  return Number.isNaN(timestamp) ? 0 : timestamp;
+function importBatchKey(asset) {
+  return String(asset.importBatchId || asset.importBatchAt || asset.sourceUrl || asset.source || asset.id || "");
+}
+
+function buildImportSequence(list) {
+  const sequence = new Map();
+  let batch = -1;
+  let previousKey = null;
+  let indexInBatch = 0;
+  list.forEach(asset => {
+    const key = importBatchKey(asset);
+    if (key !== previousKey) {
+      batch += 1;
+      indexInBatch = 0;
+      previousKey = key;
+    }
+    sequence.set(asset, { batch, index: indexInBatch });
+    indexInBatch += 1;
+  });
+  return sequence;
 }
 
 function visibleAssets() {
   const normalized = query.trim().toLowerCase();
+  const importSequence = buildImportSequence(assets);
   return [...assets]
     .filter(asset => asset.type !== "不展示")
     .filter(asset => activeType === "全部" || asset.type === activeType)
     .filter(asset => activeTag === "全部" || primaryTagsFor(asset).includes(activeTag))
     .filter(asset => !normalized || [asset.name, asset.type, asset.source, ...asset.tags].join(" ").toLowerCase().includes(normalized))
     .sort((a, b) => {
-      const timeDifference = collectionTime(b) - collectionTime(a);
-      const orderedDifference = sortNewest ? timeDifference : -timeDifference;
-      return orderedDifference || String(a.id).localeCompare(String(b.id));
+      const aOrder = importSequence.get(a);
+      const bOrder = importSequence.get(b);
+      const batchDifference = bOrder.batch - aOrder.batch;
+      const orderedDifference = sortNewest ? batchDifference : -batchDifference;
+      return orderedDifference || aOrder.index - bOrder.index;
     });
 }
 

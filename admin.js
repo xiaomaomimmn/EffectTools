@@ -10,9 +10,19 @@ const DELETION_LEDGER_MIGRATION_KEY = "kittyme-deletion-ledger-migrated-v3";
 const UNITY_SMOKE_CC0_MIGRATION_KEY = "mewfx-unity-smoke-cc0-migrated-v2";
 const RPICSTER_TAXONOMY_MIGRATION_KEY = "mewfx-rpicster-taxonomy-migrated-v1";
 const RPICSTER_CC0_MIGRATION_KEY = "mewfx-rpicster-cc0-migrated-v1";
+const OPENGAMEART_CC0_MIGRATION_KEY = "mewfx-opengameart-cc0-migrated-v1";
 const PERMANENTLY_DELETED_ASSET_IDS = new Set([
   "fx-001","fx-002","fx-003","fx-004","fx-005","fx-006","fx-007","fx-008",
-  "pixel-fx-32x32-grow-08","pixel-fx-32x32-grow-09","pixel-fx-32x32-grow-10","pixel-fx-32x32-grow-11","pixel-fx-32x32-grow-12"
+  "pixel-fx-32x32-grow-08","pixel-fx-32x32-grow-09","pixel-fx-32x32-grow-10","pixel-fx-32x32-grow-11","pixel-fx-32x32-grow-12",
+  ...(globalThis.RETIRED_ASSET_IDS || [])
+]);
+const COLLECTION_ONLY_ASSET_IDS = new Set([
+  "cartoon-smoke-chemical-smoke",
+  "cartoon-smoke-poisonous-smoke",
+  "cartoon-smoke-smoke",
+  "cartoon-smoke-smoke-blow",
+  "cartoon-smoke-smoke-explosion",
+  "cartoon-smoke-smoke-spell"
 ]);
 const PHYSICAL_DELETION_MIGRATION_KEY = "kittyme-physical-deletions-resolved-v1";
 const CONTENT_SYNC_CHANNEL_NAME = "mewfx-content-sync-v1";
@@ -101,6 +111,12 @@ function createBdragon750SequenceAssets(){return []}
 const codeManuVfxAssets = globalThis.CODEMANU_VFX_ASSETS || [];
 const unityWispySmokeAssets = globalThis.UNITY_WISPY_SMOKE_ASSETS || [];
 const rpicsterVfxAssets = globalThis.RPICSTER_VFX_ASSETS || [];
+const gothicvaniaMagicAssets = globalThis.GOTHICVANIA_MAGIC_ASSETS || [];
+const hitAnimationAssets = globalThis.HIT_ANIMATION_ASSETS || [];
+const fireSmokeAnimationAssets = globalThis.FIRE_SMOKE_ANIMATION_ASSETS || [];
+const lensFlareParticleAssets = globalThis.LENS_FLARE_PARTICLE_ASSETS || [];
+const fxChargeAssets = globalThis.FX_CHARGE_ASSETS || [];
+const kronbitsParticleAssets = globalThis.KRONBITS_PARTICLE_ASSETS || [];
 function normalizeLibraryPath(value="") {
   const directoryMap={"光效":"light-effects","序列":"sequences","元素":"elements","循环":"loops","物体":"objects","_source":"hidden","source":"hidden"};
   let result=String(value);
@@ -291,6 +307,87 @@ function ensureRpicsterVfxPack() {
 
 ensureRpicsterVfxPack();
 
+function ensureGothicvaniaMagicPack() {
+  try {
+    const list=readList(ASSETS_KEY),existingIds=new Set(list.map(item=>String(item.id)));
+    const deletedValue=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]"),deletedIds=new Set(Array.isArray(deletedValue)?deletedValue.map(String):[]);
+    const additions=gothicvaniaMagicAssets.filter(item=>!existingIds.has(item.id)&&!deletedIds.has(item.id));
+    if(additions.length)writeList(ASSETS_KEY,[...list,...additions]);
+  } catch {}
+}
+
+ensureGothicvaniaMagicPack();
+
+function ensureHitAnimationPack() {
+  try {
+    const list=readList(ASSETS_KEY),existingIds=new Set(list.map(item=>String(item.id)));
+    const deletedValue=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]"),deletedIds=new Set(Array.isArray(deletedValue)?deletedValue.map(String):[]);
+    const additions=hitAnimationAssets.filter(item=>!existingIds.has(item.id)&&!deletedIds.has(item.id));
+    if(additions.length)writeList(ASSETS_KEY,[...list,...additions]);
+  } catch {}
+}
+
+ensureHitAnimationPack();
+
+function ensureFireSmokeAnimationPack() {
+  try {
+    const list=readList(ASSETS_KEY),existingIds=new Set(list.map(item=>String(item.id)));
+    const deletedValue=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]"),deletedIds=new Set(Array.isArray(deletedValue)?deletedValue.map(String):[]);
+    const additions=fireSmokeAnimationAssets.filter(item=>!existingIds.has(item.id)&&!deletedIds.has(item.id));
+    if(additions.length)writeList(ASSETS_KEY,[...list,...additions]);
+  } catch {}
+}
+
+ensureFireSmokeAnimationPack();
+
+function ensureLensFlareParticlePack() {
+  try {
+    const list=readList(ASSETS_KEY),existingIds=new Set(list.map(item=>String(item.id)));
+    const deletedValue=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]"),deletedIds=new Set(Array.isArray(deletedValue)?deletedValue.map(String):[]);
+    const additions=lensFlareParticleAssets.filter(item=>!existingIds.has(item.id)&&!deletedIds.has(item.id));
+    if(additions.length)writeList(ASSETS_KEY,[...list,...additions]);
+  } catch {}
+}
+
+ensureLensFlareParticlePack();
+
+function ensureFxChargePack() {
+  try {
+    const list=readList(ASSETS_KEY),existingIds=new Set(list.map(item=>String(item.id)));
+    const deletedValue=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]"),deletedIds=new Set(Array.isArray(deletedValue)?deletedValue.map(String):[]);
+    const additions=fxChargeAssets.filter(item=>!existingIds.has(item.id)&&!deletedIds.has(item.id));
+    if(additions.length)writeList(ASSETS_KEY,[...list,...additions]);
+  } catch {}
+}
+
+ensureFxChargePack();
+
+function ensureKronbitsParticlePack() {
+  try {
+    const list=readList(ASSETS_KEY),existingIds=new Set(list.map(item=>String(item.id)));
+    const deletedValue=JSON.parse(localStorage.getItem(DELETED_ASSETS_KEY)||"[]"),deletedIds=new Set(Array.isArray(deletedValue)?deletedValue.map(String):[]);
+    const additions=kronbitsParticleAssets.filter(item=>!existingIds.has(item.id)&&!deletedIds.has(item.id));
+    if(additions.length)writeList(ASSETS_KEY,[...list,...additions]);
+  } catch {}
+}
+
+ensureKronbitsParticlePack();
+
+function migrateOpenGameArtCc0() {
+  if(localStorage.getItem(OPENGAMEART_CC0_MIGRATION_KEY))return;
+  try {
+    const canonicalById=new Map([...hitAnimationAssets,...fireSmokeAnimationAssets].map(item=>[String(item.id),item]));
+    const list=JSON.parse(localStorage.getItem(ASSETS_KEY)||"[]");
+    if(Array.isArray(list)){
+      const updated=list.map(item=>canonicalById.has(String(item.id))?{...item,...canonicalById.get(String(item.id))}:item);
+      localStorage.setItem(ASSETS_KEY,JSON.stringify(updated));
+    }
+    localStorage.setItem(OPENGAMEART_CC0_MIGRATION_KEY,"1");
+  } catch {}
+}
+
+migrateOpenGameArtCc0();
+
 let assets = readList(ASSETS_KEY);
 let submissions = readList(SUBMISSIONS_KEY);
 let editorImage = "";
@@ -309,10 +406,10 @@ let adminSequenceAnimationRequest = 0;
 let activeAssetTab = "public";
 
 function readList(key) {
-  try { const value = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(value) ? value.filter(item=>key!==ASSETS_KEY||!PERMANENTLY_DELETED_ASSET_IDS.has(String(item.id))).map(item => {
-    const canonical=[...unityWispySmokeAssets,...rpicsterVfxAssets].find(asset=>String(asset.id)===String(item.id));
+  try { const value = JSON.parse(localStorage.getItem(key) || "[]"); return Array.isArray(value) ? value.filter(item=>key!==ASSETS_KEY||(!PERMANENTLY_DELETED_ASSET_IDS.has(String(item.id))&&!COLLECTION_ONLY_ASSET_IDS.has(String(item.id)))).map(item => {
+    const canonical=[...unityWispySmokeAssets,...rpicsterVfxAssets,...gothicvaniaMagicAssets].find(asset=>String(asset.id)===String(item.id));
     const canonicalLicense=canonical?{license:canonical.license,licenseUrl:canonical.licenseUrl,attributionRequired:canonical.attributionRequired,optionalAttribution:canonical.optionalAttribution,downloadDisabled:canonical.downloadDisabled,downloadUrl:canonical.downloadUrl,downloadFileName:canonical.downloadFileName}:{};
-    return { ...item, ...canonicalLicense, type: normalizeType(item.type), source:["Lumina Original","KITTYME Original"].includes(item.source)?"MewFX Original":item.source, image: normalizeLibraryPath(item.image) };
+    return { ...canonical, ...item, ...canonicalLicense, type: normalizeType(item.type||canonical?.type), source:["Lumina Original","KITTYME Original"].includes(item.source)?"MewFX Original":(item.source||canonical?.source), image: normalizeLibraryPath(item.image||canonical?.image||"") };
   }) : []; }
   catch { return []; }
 }
@@ -422,6 +519,13 @@ function importSubmittedAssets(rawValue) {
 }
 function deletedSourceForId(id) {
   if(String(id).startsWith("codemanu-vfx-"))return "VFX Free Pack by CodeManu";
+  if(String(id).startsWith("gothicvania-magic-"))return "Gothicvania Magic Pack 9 by ansimuz";
+  if(String(id).startsWith("hit-animation-"))return "Hit Animation - Frame by Frame";
+  if(String(id).startsWith("fire-smoke-animation-"))return "Fire & Smoke Animations";
+  if(String(id).startsWith("lens-flare-particle-"))return "Lens Flares and Particles by hackcraft.de";
+  if(String(id).startsWith("fx-charge-"))return "FX Charge";
+  if(String(id).startsWith("kronbits-particle-"))return "Particle Pack by Kronbits";
+  if(String(id).startsWith("cartoon-smoke-"))return "Free 2D Cartoon Smoke Effects Pack";
   if(String(id).startsWith("bdragon-750-sequence-"))return "750 Effect and FX Pixel All by bdragon1727";
   if(String(id).startsWith("kenney-pattern-"))return "Kenney Pattern Pack";
   if(String(id).startsWith("kenney-splat-"))return "Kenney Splat Pack";
@@ -436,6 +540,18 @@ function inferDeletedRecord(id) {
   const typeDirectories={"光效":"light-effects","元素":"elements","循环":"loops","物体":"objects"};
   const codeManuItem=codeManuVfxAssets.find(item=>item.id===value);
   if(codeManuItem)return {id:value,name:codeManuItem.name,image:codeManuItem.image,type:codeManuItem.type,source:codeManuItem.source,sourceUrl:codeManuItem.sourceUrl,deletedAt:""};
+  const gothicvaniaItem=gothicvaniaMagicAssets.find(item=>item.id===value);
+  if(gothicvaniaItem)return {id:value,name:gothicvaniaItem.name,image:gothicvaniaItem.image,type:gothicvaniaItem.type,source:gothicvaniaItem.source,sourceUrl:gothicvaniaItem.sourceUrl,deletedAt:""};
+  const hitAnimationItem=hitAnimationAssets.find(item=>item.id===value);
+  if(hitAnimationItem)return {id:value,name:hitAnimationItem.name,image:hitAnimationItem.image,type:hitAnimationItem.type,source:hitAnimationItem.source,sourceUrl:hitAnimationItem.sourceUrl,deletedAt:""};
+  const fireSmokeItem=fireSmokeAnimationAssets.find(item=>item.id===value);
+  if(fireSmokeItem)return {id:value,name:fireSmokeItem.name,image:fireSmokeItem.image,type:fireSmokeItem.type,source:fireSmokeItem.source,sourceUrl:fireSmokeItem.sourceUrl,deletedAt:""};
+  const lensFlareItem=lensFlareParticleAssets.find(item=>item.id===value);
+  if(lensFlareItem)return {id:value,name:lensFlareItem.name,image:lensFlareItem.image,type:lensFlareItem.type,source:lensFlareItem.source,sourceUrl:lensFlareItem.sourceUrl,deletedAt:""};
+  const fxChargeItem=fxChargeAssets.find(item=>item.id===value);
+  if(fxChargeItem)return {id:value,name:fxChargeItem.name,image:fxChargeItem.image,type:fxChargeItem.type,source:fxChargeItem.source,sourceUrl:fxChargeItem.sourceUrl,deletedAt:""};
+  const kronbitsParticleItem=kronbitsParticleAssets.find(item=>item.id===value);
+  if(kronbitsParticleItem)return {id:value,name:kronbitsParticleItem.name,image:kronbitsParticleItem.image,type:kronbitsParticleItem.type,source:kronbitsParticleItem.source,sourceUrl:kronbitsParticleItem.sourceUrl,deletedAt:""};
   const sequenceMatch=value.match(/^bdragon-750-sequence-(\d{3})$/);
   if(sequenceMatch){
     const item=createBdragon750SequenceAssets().find(asset=>asset.id===value);
@@ -586,14 +702,35 @@ function itemTime(item) {
   const timestamp=Date.parse(item.collectedAt||item.submittedAt||bundledFallback||item.createdAt||"");
   return Number.isNaN(timestamp)?0:timestamp;
 }
+function importBatchKey(item) {
+  return String(item.importBatchId||item.importBatchAt||item.sourceUrl||item.source||item.id||"");
+}
+function buildImportSequence(list) {
+  const sequence=new Map();
+  let batch=-1,previousKey=null,indexInBatch=0;
+  list.forEach(item=>{
+    const key=importBatchKey(item);
+    if(key!==previousKey){batch+=1;indexInBatch=0;previousKey=key}
+    sequence.set(item,{batch,index:indexInBatch});
+    indexInBatch+=1;
+  });
+  return sequence;
+}
 function filteredList(mode) {
   const state=filterState[mode];
+  const importSequence=mode==="asset"?buildImportSequence(assets):null;
   return scopedListForMode(mode).filter(item => {
     const typeMatches=!state.type || normalizeType(item.type)===state.type;
     const primary=primaryCategory(item);
     const primaryMatches=!state.primary || (state.primary==="__none__" ? !primary : primary===state.primary);
     return typeMatches && primaryMatches;
   }).sort((a,b)=>{
+    if(mode==="asset"){
+      const aOrder=importSequence.get(a),bOrder=importSequence.get(b);
+      const batchDifference=bOrder.batch-aOrder.batch;
+      const orderedDifference=sortNewest[mode]?batchDifference:-batchDifference;
+      return orderedDifference||aOrder.index-bOrder.index;
+    }
     const difference=itemTime(b)-itemTime(a);
     return (sortNewest[mode]?difference:-difference)||String(a.id).localeCompare(String(b.id));
   });
@@ -780,7 +917,7 @@ function enableDragSelection(grid,mode) {
   });
 }
 function previewImageFor(item) {
-  const animatedPreview=item.animatedPreview||[...codeManuVfxAssets,...unityWispySmokeAssets].find(asset=>String(asset.id)===String(item.id))?.animatedPreview;
+  const animatedPreview=item.animatedPreview||[...codeManuVfxAssets,...unityWispySmokeAssets,...gothicvaniaMagicAssets,...hitAnimationAssets,...fireSmokeAnimationAssets,...fxChargeAssets].find(asset=>String(asset.id)===String(item.id))?.animatedPreview;
   if(animatedPreview)return animatedPreview;
   const frames=Array.isArray(item.sequenceFrames)?item.sequenceFrames.filter(Boolean):[];
   return frames.length?frames[Math.floor(frames.length/2)]:(item.image||"");
@@ -823,7 +960,7 @@ function cardHtml(item, mode) {
   const id=String(item.id);
   const frames=Array.isArray(item.sequenceFrames)?item.sequenceFrames.filter(Boolean):[];
   const previewImage=previewImageFor(item);
-  const hasAnimatedPreview=Boolean(item.animatedPreview||[...codeManuVfxAssets,...unityWispySmokeAssets].find(asset=>String(asset.id)===id)?.animatedPreview);
+  const hasAnimatedPreview=Boolean(item.animatedPreview||[...codeManuVfxAssets,...unityWispySmokeAssets,...gothicvaniaMagicAssets,...hitAnimationAssets,...fireSmokeAnimationAssets,...fxChargeAssets].find(asset=>String(asset.id)===id)?.animatedPreview);
   const image = previewImage ? `<img class="review-preview" src="${previewImage}" alt="${escapeHtml(item.name)}" loading="lazy"${frames.length>1&&!hasAnimatedPreview?` data-sequence-preview="${escapeHtml(id)}"`:""} />` : `<span>程序生成预览</span>`;
   const source = [item.source, item.sourceUrl].filter(Boolean).map(escapeHtml).join("<br>") || "未填写";
   const selected=selectedItems[mode].has(id);
@@ -974,7 +1111,7 @@ $("#editorForm").addEventListener("submit",event=>{
   event.preventDefault(); const mode=$("#editorMode").value,id=$("#editorId").value; const source=$("#editorSource").value.trim(),sourceUrl=$("#editorSourceUrl").value.trim();
   if(!source&&!sourceUrl){showToast("请填写出处或出处地址");return}
   const old=(mode==="submission"?submissions:assets).find(item=>item.id===id); const tags=$("#editorTags").value.split(/[,，]/).map(v=>v.trim()).filter(Boolean); const record={...old,id:mode==="submission"?`fx-${Date.now().toString(36)}`:id,name:$("#editorName").value.trim(),type:$("#editorType").value,license:$("#editorLicense").value,tags,primaryTags:tags.slice(0,1),secondaryTags:tags.slice(1),source,sourceUrl,resolution:$("#editorResolution").value.trim()||"未标注",format:$("#editorFormat").value.trim()||"未标注",description:$("#editorDescription").value.trim(),image:editorImage,createdAt:old.createdAt||new Date().toISOString().slice(0,10),collectedAt:mode==="submission"?new Date().toISOString():(old.collectedAt||old.createdAt||new Date().toISOString()),preset:old.preset||"nebula",colors:old.colors||["#ff9fbd","#6957d9","#251d39"]};
-  try { if(mode==="submission"){assets.unshift(record);submissions=submissions.filter(item=>item.id!==id);writeList(SUBMISSIONS_KEY,submissions)}else assets=assets.map(item=>item.id===id?record:item);writeList(ASSETS_KEY,assets);closeEditor();render();showToast(mode==="submission"?"已发布到首页":"修改已保存")} catch {showToast("保存失败，浏览器空间可能不足")}
+  try { if(mode==="submission"){assets.push(record);submissions=submissions.filter(item=>item.id!==id);writeList(SUBMISSIONS_KEY,submissions)}else assets=assets.map(item=>item.id===id?record:item);writeList(ASSETS_KEY,assets);closeEditor();render();showToast(mode==="submission"?"已发布到首页":"修改已保存")} catch {showToast("保存失败，浏览器空间可能不足")}
 });
 $("#editorDelete").addEventListener("click",()=>{const mode=$("#editorMode").value,id=$("#editorId").value;if(!confirm(mode==="submission"?"确认不收录这条投稿吗？":"确认删除这张已审核贴图的记录吗？图片文件暂时保留。"))return;if(mode==="submission"){submissions=submissions.filter(item=>item.id!==id);writeList(SUBMISSIONS_KEY,submissions)}else{const deletedRecord=assets.find(item=>item.id===id);assets=assets.filter(item=>item.id!==id);writeList(ASSETS_KEY,assets);if(deletedRecord)rememberDeletedAssets([deletedRecord])}closeEditor();render();showToast("记录已删除")});
 function rejectSubmission(id){if(!confirm("确认不收录这条投稿吗？"))return;submissions=submissions.filter(item=>item.id!==id);writeList(SUBMISSIONS_KEY,submissions);render();showToast("已移出审核队列")}

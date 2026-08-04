@@ -29,7 +29,7 @@
       format: "PNG 序列（由 TGA 转换）",
       description: `${name}来自 Unity Labs Paris 发布的免费 VFX 图像序列，共 240 帧，采用 CC0 许可，可自由用于个人及商业项目。`,
       image: sequenceFrames[0],
-      animatedPreview: `${root}/${slug}/preview.webp`,
+      animatedPreview: `${root}/${slug}/preview.webp?v=30fps`,
       sequenceFrames,
       frameRate: 30,
       frameCount: 240,

@@ -2,6 +2,9 @@
 Thumbs.db
 Desktop.ini
 *.log
+*.pyc
+__pycache__/
+.codex-*
 
 # Restricted third-party assets: source links only, never publish these files.
 assets/library/sequences/bdragon-750-fx/
@@ -12,5 +15,6 @@ incoming/*
 !incoming/.gitkeep
 incoming-preview-contact.png
 assets/library/sequences/steel-soldier-simple-sfx/
+assets/library/sequences/cartoon-smoke-effects/
 assets/library/sequences/unity-wispy-smoke/wispy-smoke-01/preview-lossy.webp
 assets/library/sequences/unity-wispy-smoke/wispy-smoke-01/preview-small.webp

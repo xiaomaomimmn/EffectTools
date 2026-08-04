@@ -1,10 +1,54 @@
 {
-  "assetCount": 2138,
-  "publicAssetCount": 2131,
-  "publicEntryCount": 517,
-  "externalResourceCount": 2,
+  "assetCount": 3311,
+  "publicAssetCount": 3311,
+  "publicEntryCount": 1498,
+  "externalResourceCount": 4,
   "hiddenAssetCount": 7,
   "collections": [
+    {
+      "collection": "Particle Pack",
+      "creator": "Kronbits",
+      "source": "https://kronbits.itch.io/particle-pack",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "licenseVerified": true,
+      "attributionRequired": false,
+      "assetCount": 936,
+      "resolution": "512 × 512",
+      "hostedLocally": true,
+      "downloadEnabled": true,
+      "categories": {
+        "light-effects": 338,
+        "sequences": 0,
+        "elements": 178,
+        "loops": 0,
+        "objects": 420
+      }
+    },
+    {
+      "collection": "Pixel Fire Asset Pack v1.2",
+      "creator": "DevKidd",
+      "source": "https://devkidd.itch.io/pixel-fire-asset-pack",
+      "preview": "https://img.itch.zone/aW1nLzIyMTgyNDI5LmdpZg==/original/rXdi%2Bu.gif",
+      "license": "DevKidd custom free license; not CC0",
+      "attributionRequired": false,
+      "assetCount": 0,
+      "sourcePngCount": 2250,
+      "sourceGifCount": 248,
+      "asepriteFileCount": 15,
+      "hostedLocally": false,
+      "previewHostedLocally": false,
+      "downloadEnabled": false,
+      "externalResourceCount": 1,
+      "categories": {
+        "light-effects": 0,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      },
+      "featuredCollection": true
+    },
     {
       "collection": "Kenney Particle Pack",
       "creator": "Kenney",
@@ -13,7 +57,13 @@
       "attributionRequired": false,
       "assetCount": 80,
       "resolution": "512 × 512",
-      "categories": { "light-effects": 30, "sequences": 0, "elements": 36, "loops": 8, "objects": 6 }
+      "categories": {
+        "light-effects": 30,
+        "sequences": 0,
+        "elements": 36,
+        "loops": 8,
+        "objects": 6
+      }
     },
     {
       "collection": "Kenney Pattern Pack",
@@ -23,7 +73,13 @@
       "attributionRequired": false,
       "assetCount": 84,
       "resolution": "256 × 256",
-      "categories": { "light-effects": 0, "sequences": 0, "elements": 0, "loops": 84, "objects": 0 }
+      "categories": {
+        "light-effects": 0,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 84,
+        "objects": 0
+      }
     },
     {
       "collection": "FX Pixel Texture",
@@ -31,8 +87,15 @@
       "source": "https://bdragon1727.itch.io/fx-pixel-texture",
       "license": "CC0",
       "attributionRequired": false,
-      "assetCount": 134,
-      "categories": { "light-effects": 57, "sequences": 0, "elements": 46, "loops": 24, "objects": 0, "hidden": 7 }
+      "assetCount": 120,
+      "categories": {
+        "light-effects": 91,
+        "sequences": 0,
+        "elements": 16,
+        "loops": 3,
+        "objects": 10,
+        "hidden": 0
+      }
     },
     {
       "collection": "Kenney Splat Pack",
@@ -42,7 +105,13 @@
       "attributionRequired": false,
       "assetCount": 36,
       "resolution": "512 × 512",
-      "categories": { "light-effects": 0, "sequences": 0, "elements": 36, "loops": 0, "objects": 0 }
+      "categories": {
+        "light-effects": 0,
+        "sequences": 0,
+        "elements": 36,
+        "loops": 0,
+        "objects": 0
+      }
     },
     {
       "collection": "Kenney Light Masks",
@@ -50,9 +119,15 @@
       "source": "https://kenney.nl/assets/light-masks",
       "license": "CC0",
       "attributionRequired": false,
-      "assetCount": 152,
+      "assetCount": 151,
       "resolution": "512 × 512",
-      "categories": { "light-effects": 152, "sequences": 0, "elements": 0, "loops": 0, "objects": 0 }
+      "categories": {
+        "light-effects": 104,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 4,
+        "objects": 43
+      }
     },
     {
       "collection": "VFX Free Pack",
@@ -65,7 +140,13 @@
       "sequenceCount": 22,
       "frameRate": 30,
       "hostedLocally": true,
-      "categories": { "light-effects": 0, "sequences": 680, "elements": 0, "loops": 0, "objects": 0 }
+      "categories": {
+        "light-effects": 0,
+        "sequences": 680,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
     },
     {
       "collection": "Free VFX Image Sequences & Flipbooks",
@@ -79,7 +160,13 @@
       "frameRate": 30,
       "hostedLocally": true,
       "downloadEnabled": true,
-      "categories": { "light-effects": 0, "sequences": 960, "elements": 0, "loops": 0, "objects": 0 }
+      "categories": {
+        "light-effects": 0,
+        "sequences": 960,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
     },
     {
       "collection": "Godot particle and VFX textures",
@@ -94,7 +181,139 @@
       "resolution": "256 × 256",
       "hostedLocally": true,
       "downloadEnabled": true,
-      "categories": { "light-effects": 12, "sequences": 0, "elements": 0, "loops": 0, "objects": 0 }
+      "categories": {
+        "light-effects": 12,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
+    },
+    {
+      "collection": "Gothicvania Magic Pack 9",
+      "creator": "ansimuz",
+      "source": "https://opengameart.org/content/gothicvania-magic-pack-9",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "optionalAttribution": "ansimuz",
+      "assetCount": 42,
+      "sequenceCount": 4,
+      "frameRate": 30,
+      "hostedLocally": true,
+      "downloadEnabled": true,
+      "categories": {
+        "light-effects": 0,
+        "sequences": 42,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
+    },
+    {
+      "collection": "Hit Animation - Frame by Frame",
+      "source": "https://opengameart.org/content/hit-animation-frame-by-frame",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "assetCount": 32,
+      "sequenceCount": 2,
+      "frameRate": 30,
+      "sourceResolution": "1024 × 1024 per frame",
+      "resolution": "512 × 512",
+      "hostedLocally": true,
+      "downloadEnabled": true,
+      "categories": {
+        "light-effects": 0,
+        "sequences": 32,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
+    },
+    {
+      "collection": "Fire & Smoke Animations",
+      "source": "https://opengameart.org/content/fire-smoke-animations",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "assetCount": 135,
+      "sequenceCount": 11,
+      "frameRate": 30,
+      "resolution": "8 × 8 to 64 × 64 power-of-two frames",
+      "hostedLocally": true,
+      "downloadEnabled": true,
+      "categories": {
+        "light-effects": 0,
+        "sequences": 135,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
+    },
+    {
+      "collection": "Lens Flares and Particles",
+      "creator": "hackcraft.de",
+      "source": "https://opengameart.org/content/lens-flares-and-particles",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "optionalAttribution": "hackcraft.de",
+      "assetCount": 35,
+      "resolution": "64 × 128 to 256 × 256",
+      "hostedLocally": true,
+      "downloadEnabled": true,
+      "categories": {
+        "light-effects": 29,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 0,
+        "objects": 6
+      }
+    },
+    {
+      "collection": "FX Charge",
+      "source": "https://opengameart.org/content/fx-charge",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attributionRequired": false,
+      "assetCount": 8,
+      "sequenceCount": 1,
+      "frameRate": 30,
+      "resolution": "256 × 256",
+      "hostedLocally": true,
+      "downloadEnabled": true,
+      "categories": {
+        "light-effects": 0,
+        "sequences": 8,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      }
+    },
+    {
+      "collection": "Free 2D Cartoon Smoke Effects Pack",
+      "creator": "Free Game Assets / CraftPix",
+      "source": "https://craftpix.net/freebies/free-cartoon-smoke-effects-asset-pack/",
+      "preview": "https://img.craftpix.net/2026/05/Free-Cartoon-Smoke-Effects-Asset-Pack.gif",
+      "license": "CraftPix terms; not CC0",
+      "licenseUrl": "https://craftpix.net/file-licenses/",
+      "attributionRequired": null,
+      "assetCount": 0,
+      "sourceFrameCount": 68,
+      "sequenceCount": 6,
+      "hostedLocally": false,
+      "previewHostedLocally": false,
+      "downloadEnabled": false,
+      "externalResourceCount": 1,
+      "categories": {
+        "light-effects": 0,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      },
+      "featuredCollection": true
     },
     {
       "collection": "750 Effect and FX Pixel All",
@@ -105,7 +324,13 @@
       "assetCount": 0,
       "externalResourceCount": 1,
       "hostedLocally": false,
-      "categories": { "light-effects": 0, "sequences": 0, "elements": 0, "loops": 0, "objects": 0 },
+      "categories": {
+        "light-effects": 0,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      },
       "featuredCollection": true
     },
     {
@@ -117,7 +342,13 @@
       "assetCount": 0,
       "externalResourceCount": 1,
       "hostedLocally": false,
-      "categories": { "light-effects": 0, "sequences": 0, "elements": 0, "loops": 0, "objects": 0 },
+      "categories": {
+        "light-effects": 0,
+        "sequences": 0,
+        "elements": 0,
+        "loops": 0,
+        "objects": 0
+      },
       "featuredCollection": true
     }
   ]

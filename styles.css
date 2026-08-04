@@ -441,6 +441,13 @@ body.dark {
 .collection-card-simple-sfx .pixel-core { box-shadow: 0 0 75px rgba(44,214,177,.34); }
 .collection-card-simple-sfx .collection-art strong { color: #effffb; text-shadow: 7px 7px 0 rgba(5,31,32,.42); }
 .collection-card-simple-sfx .collection-art small { color: #8df5d8; }
+.collection-card-cartoon-smoke .collection-art { background: radial-gradient(circle at 50% 48%,rgba(153,108,255,.34),transparent 28%),linear-gradient(145deg,#171425,#3c2858 62%,#171621); }
+.collection-card-cartoon-smoke .collection-art .collection-preview { image-rendering: auto; }
+.collection-card-cartoon-smoke .collection-art strong { color: #fff; }
+.collection-card-cartoon-smoke .collection-art small { color: #d8c4ff; }
+.collection-card-pixel-fire .collection-art { background: radial-gradient(circle at 50% 54%,rgba(255,143,55,.42),transparent 26%),linear-gradient(145deg,#1f1110,#57301d 62%,#1a1415); }
+.collection-card-pixel-fire .collection-art strong { color: #fff4d2; text-shadow: 7px 7px 0 rgba(71,22,8,.48); }
+.collection-card-pixel-fire .collection-art small { color: #ffc46f; }
 .collection-copy h3 { max-width: 680px; margin: 0 0 20px; font-size: clamp(30px,4vw,58px); line-height: 1.02; letter-spacing: -.045em; }
 .collection-copy > p { max-width: 700px; margin: 0 0 30px; color: #666975; font-size: 13px; line-height: 1.9; }
 .collection-license { display: grid; grid-template-columns: 1fr 1fr; margin: 0 0 34px; border-top: 1px solid rgba(38,40,52,.13); }

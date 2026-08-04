@@ -47,7 +47,7 @@
       format: "PNG 序列（ZIP）",
       description: `${name}出自 CodeManu 的 VFX Free Pack，以 30 FPS 播放。素材采用 CC BY 4.0，使用和再分发时必须署名 CodeManu。`,
       image: sequenceFrames[0],
-      animatedPreview: `${root}/${slug}/preview.webp`,
+      animatedPreview: `${root}/${slug}/preview.webp?v=30fps`,
       sequenceFrames,
       frameRate: 30,
       frameCount,

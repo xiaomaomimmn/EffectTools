@@ -147,7 +147,7 @@ CodeManu 制作的 2D 特效序列包，按 CC BY 4.0 收录并在首页以 30 F
 - 未导入内容：60 FPS、GIF、Spritesheets、SMP 工程文件
 - 下载形式：每组独立 Frames ZIP，ZIP 内附 `ATTRIBUTION.md`
 - 首页展示：每组作为一张“序列”卡片，以 30 FPS 循环预览
-- 网页预览：128 × 128、15 FPS 透明动画 WebP；不影响原始 Frames 下载
+- 网页预览：128 × 128、30 FPS 透明动画 WebP；不影响原始 Frames 下载
 
 ## Free VFX Image Sequences & Flipbooks
 
@@ -178,6 +178,119 @@ RPicster 分享的 12 张透明背景粒子与 VFX 光效贴图。
 - 图片类型：放射光束 3 张、旋涡光效 1 张、光斑 4 张、星芒 4 张
 - 主要细分类：星芒、光迹、光斑（均复用现有分类）
 - 下载形式：可直接下载透明背景 PNG 原图
+
+## Gothicvania Magic Pack 9
+
+ansimuz 发布的 4 组横向像素特效序列图集，已逐帧切分并保持透明背景。
+
+- 素材作者：ansimuz
+- 来源地址：https://opengameart.org/content/gothicvania-magic-pack-9
+- 版权许可：CC0 1.0 Universal
+- 许可证：https://creativecommons.org/publicdomain/zero/1.0/
+- 署名要求：无需署名；可选署名 ansimuz
+- 本地内容：暗影雷击 11 帧、火焰炸弹 14 帧、连锁闪电 10 帧、魔法火花 7 帧
+- 正方形处理：以透明画布居中补齐，不拉伸、不裁掉特效内容
+- 主要细分类：能量、爆炸（复用现有序列分类）
+- 网页预览：128 × 128、30 FPS 透明动画 WebP
+- 下载形式：每组提供独立 Frames ZIP，包含原始图集、切分帧及来源说明
+
+## Hit Animation - Frame by Frame
+
+OpenGameArt 上的两组金色命中动画，原始文件均为 4096 × 4096 的 4 × 4 图集。
+
+- 来源地址：https://opengameart.org/content/hit-animation-frame-by-frame
+- 版权许可：CC0 1.0 Universal
+- 许可证：https://creativecommons.org/publicdomain/zero/1.0/
+- 署名要求：无需署名
+- 本地内容：2 组、每组 16 帧，共 32 帧
+- 原始单帧：1024 × 1024 RGBA PNG
+- 网页与下载帧：高质量缩小为 512 × 512 RGBA PNG，不裁切画面
+- 主要细分类：冲击（复用现有序列分类）
+- 网页预览：128 × 128、30 FPS 透明动画 WebP
+- 下载形式：每组提供独立 Frames ZIP，包含原始图集、512 × 512 切分帧及 CC0 来源说明
+
+## Fire & Smoke Animations
+
+OpenGameArt 上的 11 组像素火焰与烟雾横向图集，已按图集高度逐帧切分。
+
+- 来源地址：https://opengameart.org/content/fire-smoke-animations
+- 版权许可：CC0 1.0 Universal
+- 许可证：https://creativecommons.org/publicdomain/zero/1.0/
+- 署名要求：无需署名
+- 本地内容：11 组、共 135 帧
+- 切片规则：以图集高度作为单帧宽高，从左至右切分
+- 2 次幂处理：8→8、12/16→16、19/20/22→32、44→64
+- 像素处理：仅透明居中补边，不缩放、不裁切原始像素
+- 主要细分类：爆炸、像素火焰、烟雾序列（均复用现有分类）
+- 网页预览：128 × 128、30 FPS、最近邻像素放大
+- 下载形式：每组提供独立 Frames ZIP，包含原始图集、2 次幂切分帧及 CC0 来源说明
+
+## Lens Flares and Particles
+
+hackcraft.de 发布的 36 张镜头光斑、光环、星芒和粒子灰度贴图。
+
+- 来源地址：https://opengameart.org/content/lens-flares-and-particles
+- 随附授权文件：`LICENSE`，原文为 `CC0 - Public Domain Donation by hackcraft.de`
+- 版权许可：CC0 1.0 Universal
+- 署名要求：无需署名；可选署名 hackcraft.de
+- 本地内容：36 张 PNG，尺寸为 64 × 128、128 × 128 或 256 × 256
+- 贴图特性：保留原始黑色背景与灰度通道，适合加法或滤色混合
+- 主要细分类：光环、星芒、光点、放射光、光斑、光格、漩涡（全部复用现有分类）
+- 下载形式：可直接下载 PNG 原图
+
+## FX Charge
+
+OpenGameArt 上的白色充能命中序列。
+
+- 来源地址：https://opengameart.org/content/fx-charge
+- 版权许可：CC0 1.0 Universal
+- 许可证：https://creativecommons.org/publicdomain/zero/1.0/
+- 署名要求：无需署名
+- 本地内容：1 组、8 张 256 × 256 RGBA PNG
+- 切片顺序：原始 256 × 2048 纵向图集，从上到下切分；保留透明收尾帧
+- 主要细分类：冲击（复用现有分类）
+- 网页预览：128 × 128、30 FPS 透明动画 WebP
+- 下载形式：Frames ZIP，包含原始图集、8 张切分帧及 CC0 来源说明
+
+## Particle Pack by Kronbits
+
+Kronbits 发布的透明粒子与特效贴图；原包 1002 张，清理无用贴图后站内保留 936 张。
+
+- 官方来源：https://kronbits.itch.io/particle-pack
+- 授权协议：CC0 1.0 Universal
+- 授权地址：https://creativecommons.org/publicdomain/zero/1.0/
+- 授权依据：作者页面的 `Asset license` 明确标注 `Creative Commons Zero v1.0 Universal`
+- 发布时间：2019-01-16；更新日期：2023-06-07
+- 图片规格：全部为 512 × 512 透明 PNG
+- 内容结构：Basic、Color、Complex
+- 当前数量：光效 338、元素 178、物体 420，共 936 张
+- 主要细分类：优先复用光环、星芒、光斑、光线、光格、漩涡、魔法、枪口、爆炸、冲击、血液、火元素、几何、符号；静态烟雾使用“烟雾”
+- 使用要求：可自由用于个人和商业项目，无需署名；站内提供原始 PNG 下载
+
+## Pixel Fire Asset Pack v1.2
+
+DevKidd 发布的像素火焰动画包，作为外链专题展示。
+
+- 官方来源：https://devkidd.itch.io/pixel-fire-asset-pack
+- 官方预览：https://img.itch.zone/aW1nLzIyMTgyNDI5LmdpZg==/original/rXdi%2Bu.gif
+- 授权状态：作者自定义免费许可，不是 CC0
+- 允许范围：可用于个人和商业项目，可修改，署名非必须
+- 明确限制：禁止将素材原样出售，修改后也不能作为素材出售
+- 包内内容：2250 张 PNG、248 个 GIF、15 个 Aseprite 文件
+- 规格说明：16 × 32、32 × 32 和 32 × 48 像素，包含多色火焰、落地火焰和烟雾变化
+- 本站处理：仅引用官方 GIF 作专题预览，不托管、不重新分发，也不提供素材文件下载
+
+## Free 2D Cartoon Smoke Effects Pack
+
+CraftPix 发布的 6 组卡通烟雾动画，作为外链专题展示。
+
+- 官方来源：https://craftpix.net/freebies/free-cartoon-smoke-effects-asset-pack/
+- 官方预览：https://img.craftpix.net/2026/05/Free-Cartoon-Smoke-Effects-Asset-Pack.gif
+- 包内许可文件：仅指向 https://craftpix.net/file-licenses/
+- 授权状态：不是 CC0；使用前以 CraftPix 原页和随包条款为准
+- 内容说明：6 组、共 68 张 PNG 源帧
+- 本站处理：从普通素材库移除，仅引用官方 GIF 作专题预览
+- 分发限制：不托管、不重新分发，也不提供素材文件下载
 
 ## FX Pixel Texture
 
