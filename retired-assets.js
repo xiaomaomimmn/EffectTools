@@ -80,5 +80,20 @@ globalThis.RETIRED_ASSET_IDS = [
   "kronbits-particle-complex-circle-spiky-20",
   "kronbits-particle-complex-circle-rounded-1",
   "lens-flare-particle-divine",
-  "kenney-light-mask-120"
+  "kenney-light-mask-120",
+  "kronbits-particle-basic-ding-shapes-dingbats-263",
+  "kronbits-particle-basic-ding-shapes-dingbats-264",
+  "kronbits-particle-basic-ding-shapes-dingbats-265",
+  "kronbits-particle-basic-ding-shapes-dingbats-266",
+  "kronbits-particle-basic-ding-shapes-dingbats-270",
+  "kronbits-particle-basic-ding-shapes-dingbats-271",
+  "kronbits-particle-basic-ding-shapes-dingbats-272",
+  "kronbits-particle-basic-ding-shapes-dingbats-273",
+  "kronbits-particle-basic-ding-shapes-dingbats-277",
+  "kronbits-particle-basic-ding-shapes-dingbats-278",
+  "kronbits-particle-basic-ding-shapes-dingbats-279",
+  "kronbits-particle-basic-ding-shapes-dingbats-280",
+  "kronbits-particle-basic-ding-shapes-dingbats-281",
+  "kronbits-particle-basic-ding-shapes-dingbats-282",
+  "kronbits-particle-basic-ding-shapes-dingbats-283"
 ];

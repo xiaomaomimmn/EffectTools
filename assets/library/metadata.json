@@ -1,7 +1,7 @@
 {
-  "assetCount": 3311,
-  "publicAssetCount": 3311,
-  "publicEntryCount": 1498,
+  "assetCount": 3296,
+  "publicAssetCount": 3296,
+  "publicEntryCount": 1483,
   "externalResourceCount": 4,
   "hiddenAssetCount": 7,
   "collections": [
@@ -13,7 +13,7 @@
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "licenseVerified": true,
       "attributionRequired": false,
-      "assetCount": 936,
+      "assetCount": 921,
       "resolution": "512 × 512",
       "hostedLocally": true,
       "downloadEnabled": true,
@@ -22,7 +22,7 @@
         "sequences": 0,
         "elements": 178,
         "loops": 0,
-        "objects": 420
+        "objects": 405
       }
     },
     {

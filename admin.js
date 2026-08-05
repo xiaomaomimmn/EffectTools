@@ -24,7 +24,6 @@ const COLLECTION_ONLY_ASSET_IDS = new Set([
   "cartoon-smoke-smoke-explosion",
   "cartoon-smoke-smoke-spell"
 ]);
-const PHYSICAL_DELETION_MIGRATION_KEY = "kittyme-physical-deletions-resolved-v1";
 const CONTENT_SYNC_CHANNEL_NAME = "mewfx-content-sync-v1";
 const CATALOG_URL = "assets/library/catalog.json";
 const CATALOG_VERSION = 1;
@@ -616,11 +615,14 @@ function resolveDeletedRecord(id) {
   localStorage.setItem(RESOLVED_DELETIONS_KEY,JSON.stringify([...resolved]));
 }
 function resolvePhysicallyDeletedAssets() {
-  if(localStorage.getItem(PHYSICAL_DELETION_MIGRATION_KEY))return;
   const resolved=readResolvedDeletionIds();
-  PERMANENTLY_DELETED_ASSET_IDS.forEach(id=>resolved.add(id));
-  localStorage.setItem(RESOLVED_DELETIONS_KEY,JSON.stringify([...resolved]));
-  localStorage.setItem(PHYSICAL_DELETION_MIGRATION_KEY,"1");
+  let changed=false;
+  PERMANENTLY_DELETED_ASSET_IDS.forEach(id=>{
+    if(resolved.has(id))return;
+    resolved.add(id);
+    changed=true;
+  });
+  if(changed)localStorage.setItem(RESOLVED_DELETIONS_KEY,JSON.stringify([...resolved]));
 }
 
 resolvePhysicallyDeletedAssets();
