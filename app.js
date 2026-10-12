@@ -546,7 +546,7 @@ function initGeometry() {
   if (!layer) return;
   const types = ["triangle", "square", "pentagon", "circle"];
   const selectedType = types[Math.floor(Math.random() * types.length)];
-  const colors = ["#9188ff", "#ec6f91", "#47c7b0", "#e2af4e", "#4aa7d6", "#d66e50"];
+  const colors = ["#14713f", "#3ddc7f", "#47c7b0", "#6ee79f", "#1f9e57", "#9fe7b8"];
   const shapes = Array.from({ length: 12 }, () => {
     const shape = document.createElement("span");
     const size = Math.round(46 + Math.random() * 474);
